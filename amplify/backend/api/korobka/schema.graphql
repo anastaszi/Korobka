@@ -1,0 +1,18 @@
+type Item @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String!
+  file: S3Object
+  url: String
+}
+
+type S3Object {
+    bucket: String!
+    key: String!
+    region: String!
+}
+
+input CreateItemInput {
+  id: ID
+  name: String!
+  description: String
+}
