@@ -537,7 +537,7 @@
 											{
 												"Ref": "S3Bucket"
 											},
-											"/uploads/*"
+											"/uploads/${cognito-identity.amazonaws.com:sub}/*"
 										]
 									]
 								}
