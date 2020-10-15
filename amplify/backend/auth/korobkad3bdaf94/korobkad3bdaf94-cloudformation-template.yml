@@ -161,8 +161,8 @@ Resources:
       Policies:
         PasswordPolicy:
           MinimumLength: !Ref passwordPolicyMinLength
-          RequireLowercase: false
-          RequireNumbers: false
+          RequireLowercase: true
+          RequireNumbers: true
           RequireSymbols: false
           RequireUppercase: false
 
@@ -243,7 +243,7 @@ Resources:
             - ' }'
             - '};'
       Handler: index.handler
-      Runtime: nodejs12.x
+      Runtime: nodejs8.10
       Timeout: '300'
       Role: !GetAtt
         - UserPoolClientRole
