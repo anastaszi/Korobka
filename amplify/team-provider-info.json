@@ -1,26 +1,47 @@
 {
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-korobka-dev-95738-authRole",
-      "UnauthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-dev-95738-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-dev-95738-authRole",
-      "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-korobka-dev-95738-deployment",
-      "UnauthRoleName": "amplify-korobka-dev-95738-unauthRole",
-      "StackName": "amplify-korobka-dev-95738",
-      "StackId": "arn:aws:cloudformation:us-west-2:096360437466:stack/amplify-korobka-dev-95738/5f6d6c60-0e3e-11eb-898f-0250b7a42d3d",
-      "AmplifyAppId": "dggh20pjw9fb"
-    },
-    "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "dggh20pjw9fb",
-          "type": "cicd"
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-korobka-master-05605-authRole",
+            "UnauthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-master-05605-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-master-05605-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-korobka-master-05605-deployment",
+            "UnauthRoleName": "amplify-korobka-master-05605-unauthRole",
+            "StackName": "amplify-korobka-master-05605",
+            "StackId": "arn:aws:cloudformation:us-west-2:096360437466:stack/amplify-korobka-master-05605/34caad40-0e81-11eb-8108-068b67c578d2",
+            "AmplifyAppId": "dggh20pjw9fb"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "dggh20pjw9fb",
+                    "type": "cicd"
+                }
+            }
         }
-      },
-      "auth": {
-        "korobkad3bdaf94": {}
-      }
+    },
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-korobka-dev-95738-authRole",
+            "UnauthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-dev-95738-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-dev-95738-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-korobka-dev-95738-deployment",
+            "UnauthRoleName": "amplify-korobka-dev-95738-unauthRole",
+            "StackName": "amplify-korobka-dev-95738",
+            "StackId": "arn:aws:cloudformation:us-west-2:096360437466:stack/amplify-korobka-dev-95738/5f6d6c60-0e3e-11eb-898f-0250b7a42d3d",
+            "AmplifyAppId": "dggh20pjw9fb"
+        },
+        "categories": {
+            "hosting": {
+                "amplifyhosting": {
+                    "appId": "dggh20pjw9fb",
+                    "type": "cicd"
+                }
+            },
+            "auth": {
+                "korobkad3bdaf94": {}
+            }
+        }
     }
-  }
 }
