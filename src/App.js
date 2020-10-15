@@ -3,14 +3,27 @@ import logo from './logo.svg';
 import './App.css';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listItems } from './graphql/queries';
-import { API, Storage } from 'aws-amplify';
+import { API, Storage, Auth } from 'aws-amplify';
+
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
+/*Auth.currentAuthenticatedUser().then(user => {
+  Storage.configure({
+      customPrefix: {
+          public: '1/',
+   },
+  })
+  console.log(Storage)
+})*/
+//Storage.put("text.txt", "hello", {customPrefix: '1/'}).catch(err => console.log(err));
+//Storage.configure({ level: 'private' });
 
 const initialFormState = { name: ''}
+
 
 function App() {
   const [items, setItems] = useState([]);
   const [formData, setFormData] = useState(initialFormState);
+
 
   useEffect(() => {
     fetchItems();
@@ -19,7 +32,7 @@ function App() {
   async function onChange(e) {
   if (!e.target.files[0]) return
   const file = e.target.files[0];
-  setFormData({ ...formData, url: file.name });
+  setFormData({ ...formData, name: file.name });
   await Storage.put(file.name, file);
   fetchItems();
 }
@@ -48,20 +61,17 @@ function App() {
     setFormData(initialFormState);
   }
 
-  async function deleteItem({ id }) {
+  async function deleteItem({ name, id }) {
     const newItemsArray = items.filter(note => note.id !== id);
     setItems(newItemsArray);
+    //Storage.remove(name, { level: 'private' }).catch(err => console.log(err));
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
   }
 
   return (
     <div className="App">
       <h1>My Items App</h1>
-      <input
-        onChange={e => setFormData({ ...formData, 'name': e.target.value})}
-        placeholder="Item name"
-        value={formData.name}
-      />
+
         <input
         type="file"
         onChange={onChange}
@@ -73,9 +83,7 @@ function App() {
             <div key={item.id || item.name}>
               <h2>{item.name}</h2>
               <button onClick={() => deleteItem(item)}>Delete item</button>
-              {
-        item.image
-      }
+
             </div>
           ))
         }

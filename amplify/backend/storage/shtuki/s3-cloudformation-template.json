@@ -56,7 +56,7 @@
 		"s3PermissionsGuestPublic": {
 			"Type": "String",
 			"Default" : "DISALLOW"
-		},	
+		},
 		"s3PermissionsGuestUploads": {
 			"Type": "String",
 			"Default" : "DISALLOW"		},
@@ -82,26 +82,26 @@
 		"triggerFunction": {
 			"Type": "String"
 		},
-	
-    
-    
+
+
+
         "functionS3Triggera83d04e6Name": {
             "Type": "String",
             "Default": "functionS3Triggera83d04e6Name"
         },
-        
+
         "functionS3Triggera83d04e6Arn": {
             "Type": "String",
             "Default": "functionS3Triggera83d04e6Arn"
         },
-        
+
         "functionS3Triggera83d04e6LambdaExecutionRole": {
             "Type": "String",
             "Default": "functionS3Triggera83d04e6LambdaExecutionRole"
         }
-        
-        
-    
+
+
+
 
 	},
 	"Conditions": {
@@ -181,11 +181,11 @@
 	"Resources": {
 		"S3Bucket": {
 			"Type": "AWS::S3::Bucket",
-		     
+
             "DependsOn": [
 				"TriggerPermissions"
 			],
-            
+
 			"DeletionPolicy" : "Retain",
 			"Properties": {
 				"BucketName": {
@@ -223,7 +223,7 @@
                         }
                     ]
                 },
-                 
+
                 "NotificationConfiguration": {
                     "LambdaConfigurations": [
                         {
@@ -240,7 +240,7 @@
                         }
                     ]
                 },
-                
+
 				"CorsConfiguration": {
 					"CorsRules": [
 						{
@@ -270,8 +270,8 @@
 				}
 			}
 		},
-      
-	     
+
+
 	    "TriggerPermissions": {
           "Type": "AWS::Lambda::Permission",
           "Properties": {
@@ -370,7 +370,7 @@
                 }
             }
         },
-	    
+
 		"S3AuthPublicPolicy": {
 			"DependsOn": [
 				"S3Bucket"
@@ -394,7 +394,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsAuthenticatedPublic"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
@@ -405,7 +405,7 @@
 											{
 												"Ref": "S3Bucket"
 											},
-											"/public/*"
+											"/public/${cognito-identity.amazonaws.com:sub}/*"
 										]
 									]
 								}
@@ -438,7 +438,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsAuthenticatedProtected"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
@@ -482,7 +482,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsAuthenticatedPrivate"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
@@ -526,7 +526,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsAuthenticatedUploads"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
@@ -606,10 +606,10 @@
 							"Condition": {
 								"StringLike": {
 									"s3:prefix": [
-										"public/",
-										"public/*",
-										"protected/",
-										"protected/*",
+										"public/${cognito-identity.amazonaws.com:sub}/",
+										"public/${cognito-identity.amazonaws.com:sub}/*",
+										"protected/${cognito-identity.amazonaws.com:sub}/",
+										"protected/${cognito-identity.amazonaws.com:sub}/*",
 										"private/${cognito-identity.amazonaws.com:sub}/",
 										"private/${cognito-identity.amazonaws.com:sub}/*"
 									]
@@ -643,7 +643,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsGuestPublic"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
@@ -687,7 +687,7 @@
 							"Action": {
 								"Fn::Split" : [ "," , {
 									"Ref": "s3PermissionsGuestUploads"
-								} ] 
+								} ]
 							},
 							"Resource": [
 								{
