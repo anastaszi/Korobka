@@ -6,16 +6,8 @@ import { listItems } from './graphql/queries';
 import { API, Storage, Auth } from 'aws-amplify';
 
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
-/*Auth.currentAuthenticatedUser().then(user => {
-  Storage.configure({
-      customPrefix: {
-          public: '1/',
-   },
-  })
-  console.log(Storage)
-})*/
-//Storage.put("text.txt", "hello", {customPrefix: '1/'}).catch(err => console.log(err));
-//Storage.configure({ level: 'private' });
+
+Storage.configure({ level: 'private' });
 
 const initialFormState = { name: ''}
 
@@ -64,7 +56,7 @@ function App() {
   async function deleteItem({ name, id }) {
     const newItemsArray = items.filter(note => note.id !== id);
     setItems(newItemsArray);
-    //Storage.remove(name, { level: 'private' }).catch(err => console.log(err));
+    Storage.remove(name, { level: 'private' }).catch(err => console.log(err));
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
   }
 

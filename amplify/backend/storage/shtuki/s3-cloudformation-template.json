@@ -223,8 +223,10 @@
                         }
                     ]
                 },
-
-                "NotificationConfiguration": {
+				"AccelerateConfiguration" : {
+					"AccelerationStatus" : "Enabled"
+				},
+        "NotificationConfiguration": {
                     "LambdaConfigurations": [
                         {
                             "Event": "s3:ObjectCreated:*",
@@ -537,7 +539,7 @@
 											{
 												"Ref": "S3Bucket"
 											},
-											"/uploads/${cognito-identity.amazonaws.com:sub}/*"
+											"/uploads/*"
 										]
 									]
 								}
@@ -606,8 +608,8 @@
 							"Condition": {
 								"StringLike": {
 									"s3:prefix": [
-										"public/${cognito-identity.amazonaws.com:sub}/",
-										"public/${cognito-identity.amazonaws.com:sub}/*",
+										"public/",
+										"public/*",
 										"protected/${cognito-identity.amazonaws.com:sub}/",
 										"protected/${cognito-identity.amazonaws.com:sub}/*",
 										"private/${cognito-identity.amazonaws.com:sub}/",
