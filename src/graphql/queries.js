@@ -5,13 +5,18 @@ export const getItem = /* GraphQL */ `
   query GetItem($id: ID!) {
     getItem(id: $id) {
       id
-      name
+      filename
+      description
+      username
+      lastname
       file {
         bucket
         key
         region
+        uploadTime
+        updateTime
+        url
       }
-      url
       createdAt
       updatedAt
       owner
@@ -27,13 +32,18 @@ export const listItems = /* GraphQL */ `
     listItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
+        filename
+        description
+        username
+        lastname
         file {
           bucket
           key
           region
+          uploadTime
+          updateTime
+          url
         }
-        url
         createdAt
         updatedAt
         owner

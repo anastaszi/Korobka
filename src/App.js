@@ -9,80 +9,75 @@ import { createItem as createItemMutation, deleteItem as deleteItemMutation } fr
 
 Storage.configure({ level: 'private' });
 
-const initialFormState = { name: ''}
-
-
-function App() {
-  const [items, setItems] = useState([]);
-  const [formData, setFormData] = useState(initialFormState);
-
-
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  async function onChange(e) {
-  if (!e.target.files[0]) return
-  const file = e.target.files[0];
-  setFormData({ ...formData, name: file.name });
-  await Storage.put(file.name, file);
-  fetchItems();
-}
-
-  async function fetchItems() {
-    const apiData = await API.graphql({ query: listItems });
-    const itemsFromAPI = apiData.data.listItems.items;
-  await Promise.all(itemsFromAPI.map(async item => {
-    if (item.url) {
-      const url = await Storage.get(item.url);
-      item.url = url;
-    }
-    return item;
-  }))
-    setItems(apiData.data.listItems.items);
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.initialFile = {filename: '', description: '', username: '', lastname: ''};
+    this.initialS3 = {bucket: process.env.REACT_APP_S3, key: '', region:  process.env.REACT_APP_S3_REGION}
+    this.createItem = this.createItem.bind(this);
+    this.fileName = React.createRef();
+    this.state = {
+      user: {},
+      items: [],
+      singleFile: {...this.initialFile},
+      s3Object: {...this.initialS3}
+    };
   }
 
-  async function createItem() {
-    if (!formData.name) return;
-    await API.graphql({ query: createItemMutation, variables: { input: formData } });
+  componentDidMount() {
+    Auth.currentUserInfo()
+      .then(res => this.setState({user: {firstname: res.attributes.email , lastname: res.attributes.email }}))
+      .catch(e => console.log(e))
+  }
+
+  createItem(event) {
+    event.preventDefault();
+    if (!this.fileName) return;
+    let file = {...this.initialS3}
+    let item = {...this.singleFile, ...this.state.user}
+    file.key = this.fileName.current.files[0].name;
+    item.filename = file.key;
+    Storage.put(file.key, this.fileName.current.files[0])
+      .then(console.log("S3 PUT: Success!"))
+      .catch(e => console.log("S3 PUT: Bad! " + e))
+      .then(Storage.get(file.key))
+      .then(res => {
+        console.log(res)
+          //const url = URL.createObjectURL(res);
+          file.url = "url";
+          item.file = file;
+          console.log(item)
+        })
+      .then(API.graphql({ query: createItemMutation, variables: { input: item } }))
+      .then(this.setState((state, item) => {return {items: state.items.push(item)}}))
+      .then(this.state.items)
+      .catch(e => console.log(e))
+    /*await API.graphql({ query: createItemMutation, variables: { input: formData } });
     if (formData.url) {
       const url = await Storage.get(formData.url);
       formData.url = url;
     }
     setItems([ ...items, formData ]);
-    setFormData(initialFormState);
+    setFormData(initialFormState);*/
   }
 
-  async function deleteItem({ name, id }) {
-    const newItemsArray = items.filter(note => note.id !== id);
-    setItems(newItemsArray);
-    Storage.remove(name, { level: 'private' }).catch(err => console.log(err));
-    await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
-  }
-
-  return (
+  render() {return (
     <div className="App">
       <h1>My Items App</h1>
-
-        <input
-        type="file"
-        onChange={onChange}
-      />
-      <button onClick={createItem}>Create Item</button>
+      <form onSubmit={this.createItem}>
+        <label>Upload file:
+          <input type="file" ref={this.fileName}/>
+        </ label>
+        <button type="submit">Create Item</button>
+      </form>
       <div style={{marginBottom: 30}}>
         {
-          items.map(item => (
-            <div key={item.id || item.name}>
-              <h2>{item.name}</h2>
-              <button onClick={() => deleteItem(item)}>Delete item</button>
 
-            </div>
-          ))
         }
       </div>
       <AmplifySignOut />
     </div>
-  );
+  );}
 }
 
 export default withAuthenticator(App);

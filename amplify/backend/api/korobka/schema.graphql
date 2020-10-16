@@ -1,18 +1,25 @@
 type Item @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  name: String!
+  filename: String!
+  description: String!
+  username: String!
+  lastname: String!
   file: S3Object
-  url: String
 }
 
 type S3Object {
     bucket: String!
     key: String!
     region: String!
+    uploadTime: AWSTimestamp
+    updateTime: AWSTimestamp
+    url: String
 }
 
 input CreateItemInput {
   id: ID
-  name: String!
+  filename: String!
   description: String
+  username: String
+  lastname: String
 }

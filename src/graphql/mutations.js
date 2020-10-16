@@ -8,13 +8,18 @@ export const createItem = /* GraphQL */ `
   ) {
     createItem(input: $input, condition: $condition) {
       id
-      name
+      filename
+      description
+      username
+      lastname
       file {
         bucket
         key
         region
+        uploadTime
+        updateTime
+        url
       }
-      url
       createdAt
       updatedAt
       owner
@@ -28,13 +33,18 @@ export const updateItem = /* GraphQL */ `
   ) {
     updateItem(input: $input, condition: $condition) {
       id
-      name
+      filename
+      description
+      username
+      lastname
       file {
         bucket
         key
         region
+        uploadTime
+        updateTime
+        url
       }
-      url
       createdAt
       updatedAt
       owner
@@ -48,13 +58,18 @@ export const deleteItem = /* GraphQL */ `
   ) {
     deleteItem(input: $input, condition: $condition) {
       id
-      name
+      filename
+      description
+      username
+      lastname
       file {
         bucket
         key
         region
+        uploadTime
+        updateTime
+        url
       }
-      url
       createdAt
       updatedAt
       owner
