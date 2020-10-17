@@ -9,14 +9,11 @@ export const getItem = /* GraphQL */ `
       description
       username
       lastname
-      file {
-        bucket
-        key
-        region
-        uploadTime
-        updateTime
-        url
-      }
+      bucket
+      region
+      key
+      uploadTime
+      updateTime
       createdAt
       updatedAt
       owner
@@ -36,14 +33,11 @@ export const listItems = /* GraphQL */ `
         description
         username
         lastname
-        file {
-          bucket
-          key
-          region
-          uploadTime
-          updateTime
-          url
-        }
+        bucket
+        region
+        key
+        uploadTime
+        updateTime
         createdAt
         updatedAt
         owner

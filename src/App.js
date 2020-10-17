@@ -4,80 +4,101 @@ import './App.css';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listItems } from './graphql/queries';
 import { API, Storage, Auth } from 'aws-amplify';
+import ListItems from './components/listItems.js';
+import Loader from './components/loader.js';
 
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
 
 Storage.configure({ level: 'private' });
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.initialFile = {filename: '', description: '', username: '', lastname: ''};
-    this.initialS3 = {bucket: process.env.REACT_APP_S3, key: '', region:  process.env.REACT_APP_S3_REGION}
-    this.createItem = this.createItem.bind(this);
-    this.fileName = React.createRef();
-    this.state = {
-      user: {},
-      items: [],
-      singleFile: {...this.initialFile},
-      s3Object: {...this.initialS3}
-    };
-  }
+const initialFile = {
+  filename: '',
+  description: '',
+  username: '',
+  lastname: '',
+  bucket: process.env.REACT_APP_S3,
+  region:  process.env.REACT_APP_S3_REGION,
+  uploadTime: ''
+};
 
-  componentDidMount() {
-    Auth.currentUserInfo()
-      .then(res => this.setState({user: {firstname: res.attributes.email , lastname: res.attributes.email }}))
-      .catch(e => console.log(e))
-  }
+function App() {
+  const [items, setItems] = useState([]);
+  const [fileData, setFileData] = useState(initialFile);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  createItem(event) {
-    event.preventDefault();
-    if (!this.fileName) return;
-    let file = {...this.initialS3}
-    let item = {...this.singleFile, ...this.state.user}
-    file.key = this.fileName.current.files[0].name;
-    item.filename = file.key;
-    Storage.put(file.key, this.fileName.current.files[0])
-      .then(console.log("S3 PUT: Success!"))
-      .catch(e => console.log("S3 PUT: Bad! " + e))
-      .then(Storage.get(file.key))
-      .then(res => {
-        console.log(res)
-          //const url = URL.createObjectURL(res);
-          file.url = "url";
-          item.file = file;
-          console.log(item)
-        })
-      .then(API.graphql({ query: createItemMutation, variables: { input: item } }))
-      .then(this.setState((state, item) => {return {items: state.items.push(item)}}))
-      .then(this.state.items)
-      .catch(e => console.log(e))
-    /*await API.graphql({ query: createItemMutation, variables: { input: formData } });
-    if (formData.url) {
-      const url = await Storage.get(formData.url);
-      formData.url = url;
+  useEffect(() => {
+    async function getUser() {
+      const user = await Auth.currentUserInfo();
+      initialFile.username = user.attributes.email;
+      initialFile.lastname = user.attributes.email;
+      initialFile.key = `private/${user.id}/`
+      setFileData(initialFile);
     }
-    setItems([ ...items, formData ]);
-    setFormData(initialFormState);*/
+    getUser();
+    fetchItems();
+  }, []);
+
+  async function fetchItems() {
+    const apiData = await API.graphql({ query: listItems });
+    const itemsFromAPI = apiData.data.listItems.items;
+    setItems(itemsFromAPI);
   }
 
-  render() {return (
+  async function updateFile(e) {
+    const file = e.target.files[0];
+    setSelectedFile(e.target.files[0]);
+    if (!file) return;
+    setFileData((prevState) => { return ({
+        ...prevState,
+        filename: file.name,
+        key: fileData.key + file.name,
+        })
+      }
+    );
+  }
+
+  async function updateDescription(e) {
+    setFileData({...fileData, description: e.target.value})
+  }
+
+  async function createItem(event) {
+    setLoading(true);
+    event.preventDefault();
+    if (!selectedFile || !fileData.description) return;
+    await Storage.put(selectedFile.name, selectedFile);
+    const currentFile = fileData;
+    currentFile.uploadTime = Date.now();
+    await API.graphql({ query: createItemMutation, variables: { input: currentFile } });
+    setLoading(false);
+    setItems([...items, currentFile]);
+    setFileData(initialFile);
+  }
+
+  async function deleteItem({ filename, id }) {
+    const newItemsArray = items.filter(note => note.id !== id);
+    setItems(newItemsArray);
+    Storage.remove(filename).catch(err => console.log(err));
+    await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
+  }
+
+
+return (
     <div className="App">
       <h1>My Items App</h1>
-      <form onSubmit={this.createItem}>
-        <label>Upload file:
-          <input type="file" ref={this.fileName}/>
-        </ label>
+      <form onSubmit={createItem}>
+        <input
+          type="text"
+          onChange={updateDescription}
+        />
+        <input type="file" onChange={updateFile}/>
         <button type="submit">Create Item</button>
       </form>
-      <div style={{marginBottom: 30}}>
-        {
-
-        }
-      </div>
+      {loading ? < Loader /> : null}
+      < ListItems items={items} deleteItem={deleteItem}/>
       <AmplifySignOut />
     </div>
-  );}
+  )
 }
 
 export default withAuthenticator(App);

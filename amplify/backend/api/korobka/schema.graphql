@@ -4,16 +4,11 @@ type Item @model @auth(rules: [{ allow: owner }]) {
   description: String!
   username: String!
   lastname: String!
-  file: S3Object
-}
-
-type S3Object {
-    bucket: String!
-    key: String!
-    region: String!
-    uploadTime: AWSTimestamp
-    updateTime: AWSTimestamp
-    url: String
+  bucket: String!
+  region: String!
+  key: String
+  uploadTime: AWSTimestamp
+  updateTime: AWSTimestamp
 }
 
 input CreateItemInput {
@@ -22,4 +17,9 @@ input CreateItemInput {
   description: String
   username: String
   lastname: String
+  bucket: String
+  region: String
+  key: String
+  uploadTime: AWSTimestamp
+  updateTime: AWSTimestamp
 }

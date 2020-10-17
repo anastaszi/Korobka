@@ -12,14 +12,11 @@ export const createItem = /* GraphQL */ `
       description
       username
       lastname
-      file {
-        bucket
-        key
-        region
-        uploadTime
-        updateTime
-        url
-      }
+      bucket
+      region
+      key
+      uploadTime
+      updateTime
       createdAt
       updatedAt
       owner
@@ -37,14 +34,11 @@ export const updateItem = /* GraphQL */ `
       description
       username
       lastname
-      file {
-        bucket
-        key
-        region
-        uploadTime
-        updateTime
-        url
-      }
+      bucket
+      region
+      key
+      uploadTime
+      updateTime
       createdAt
       updatedAt
       owner
@@ -62,14 +56,11 @@ export const deleteItem = /* GraphQL */ `
       description
       username
       lastname
-      file {
-        bucket
-        key
-        region
-        uploadTime
-        updateTime
-        url
-      }
+      bucket
+      region
+      key
+      uploadTime
+      updateTime
       createdAt
       updatedAt
       owner
