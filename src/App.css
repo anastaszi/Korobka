@@ -37,6 +37,10 @@
   }
 }
 
+td {
+  vertical-align: baseline !important;
+}
+
 .bin:hover {
   fill: red;
   cursor: pointer;

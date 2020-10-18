@@ -6,6 +6,7 @@ import { listItems } from './graphql/queries';
 import { API, Storage, Auth } from 'aws-amplify';
 import ListItems from './components/listItems.js';
 import Loader from './components/loader.js';
+import Container from 'react-bootstrap/Container'
 
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
 
@@ -84,7 +85,7 @@ function App() {
 
 
 return (
-    <div className="App">
+    <Container fluid="md">
       <h1>My Items App</h1>
       <form onSubmit={createItem}>
         <input
@@ -96,8 +97,8 @@ return (
       </form>
       {loading ? < Loader /> : null}
       < ListItems items={items} deleteItem={deleteItem}/>
-      <AmplifySignOut />
-    </div>
+      < AmplifySignOut />
+    </ Container>
   )
 }
 
