@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ReactComponent as Logo} from './logo.svg';
 import './App.css';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listItems } from './graphql/queries';
@@ -11,7 +12,6 @@ import bsCustomFileInput from 'bs-custom-file-input';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
 
 Storage.configure({ level: 'private' });
@@ -91,26 +91,31 @@ function App() {
 
 return (
     <Container fluid="md">
-      <h1>My Items Axwp</h1>
-      <Row className="justify-content-center">
-        <Col sm={6}>
-          <Form onSubmit={createItem}>
+      <Row className="mx-0 mt-5">
+        <h1 class="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1>
+      </Row>
+      <Form onSubmit={createItem}>
+        <Row className="align-items-center mx-0 my-4">
+          <Col sm={4}>
               <Form.File
                 id="custom-file"
                 label="No file selected..."
                 custom
-                className="mb-4"
                 onChange={addFile}
               />
-              <Form.Group controlId="exampleForm.ControlTextarea1">
-                  <Form.Control as="textarea" rows={3} placeholder="Add description" onChange={addDescription} />
-              </Form.Group>
-              <Button variant="secondary" type="submit">
-                Submit
-              </Button>
-            </Form>
           </Col>
-        </Row>
+          <Col sm={6}>
+              <Form.Group controlId="exampleForm.ControlTextarea1" className="m-0">
+                  <Form.Control as="textarea" rows={1} placeholder="Add description" onChange={addDescription} />
+              </Form.Group>
+          </Col>
+          <Col sm="auto">
+              <Button variant="secondary" type="submit">
+                {loading ? < Loader /> : 'Submit new file'}
+              </Button>
+              </Col>
+            </Row>
+            </Form>
       {loading ? < Loader /> : null}
       < ListItems items={items} deleteItem={deleteItem}/>
       < AmplifySignOut />

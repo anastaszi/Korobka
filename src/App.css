@@ -36,12 +36,10 @@
     transform: rotate(360deg);
   }
 }
-#table_header {
-  font-size: smaller;
-}
 
-#submitButton {
-  justify-self: end;   
+.formBorder {
+    border-style: dashed !important;
+    border-width: 3px !important;
 }
 
 .item:hover {
