@@ -75,6 +75,7 @@ function App() {
     await Storage.put(selectedFile.name, selectedFile);
     const currentFile = fileData;
     currentFile.uploadTime = Date.now();
+    currentFile.updateTime = Date.now();
     await API.graphql({ query: createItemMutation, variables: { input: currentFile } });
     setLoading(false);
     setItems([...items, currentFile]);
@@ -90,9 +91,9 @@ function App() {
 
 
 return (
-    <Container fluid="md">
+    <Container fluid="sm">
       <Row className="mx-0 mt-5">
-        <h1 class="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1>
+        <Col><h1 className="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1></Col>
       </Row>
       <Form onSubmit={createItem}>
         <Row className="align-items-center mx-0 my-4">
@@ -115,8 +116,7 @@ return (
               </Button>
               </Col>
             </Row>
-            </Form>
-      {loading ? < Loader /> : null}
+      </Form>
       < ListItems items={items} deleteItem={deleteItem}/>
       < AmplifySignOut />
     </ Container>
