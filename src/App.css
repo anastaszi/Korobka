@@ -36,12 +36,14 @@
     transform: rotate(360deg);
   }
 }
-
-td {
-  vertical-align: baseline !important;
+#table_header {
+  font-size: smaller;
 }
 
-.bin:hover {
-  fill: red;
-  cursor: pointer;
+#submitButton {
+  justify-self: end;   
+}
+
+.item:hover {
+  background-color: var(--light);
 }

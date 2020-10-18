@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listItems } from './graphql/queries';
 import { API, Storage, Auth } from 'aws-amplify';
+import Container from 'react-bootstrap/Container';
 import ListItems from './components/listItems.js';
 import Loader from './components/loader.js';
-import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form';
+import bsCustomFileInput from 'bs-custom-file-input';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
 
@@ -36,6 +40,7 @@ function App() {
       initialFile.key = `private/${user.id}/`
       setFileData(initialFile);
     }
+    bsCustomFileInput.init();
     getUser();
     fetchItems();
   }, []);
@@ -46,7 +51,7 @@ function App() {
     setItems(itemsFromAPI);
   }
 
-  async function updateFile(e) {
+  async function addFile(e) {
     const file = e.target.files[0];
     setSelectedFile(e.target.files[0]);
     if (!file) return;
@@ -59,7 +64,7 @@ function App() {
     );
   }
 
-  async function updateDescription(e) {
+  async function addDescription(e) {
     setFileData({...fileData, description: e.target.value})
   }
 
@@ -86,15 +91,26 @@ function App() {
 
 return (
     <Container fluid="md">
-      <h1>My Items App</h1>
-      <form onSubmit={createItem}>
-        <input
-          type="text"
-          onChange={updateDescription}
-        />
-        <input type="file" onChange={updateFile}/>
-        <button type="submit">Create Item</button>
-      </form>
+      <h1>My Items Axwp</h1>
+      <Row className="justify-content-center">
+        <Col sm={6}>
+          <Form onSubmit={createItem}>
+              <Form.File
+                id="custom-file"
+                label="No file selected..."
+                custom
+                className="mb-4"
+                onChange={addFile}
+              />
+              <Form.Group controlId="exampleForm.ControlTextarea1">
+                  <Form.Control as="textarea" rows={3} placeholder="Add description" onChange={addDescription} />
+              </Form.Group>
+              <Button variant="secondary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Col>
+        </Row>
       {loading ? < Loader /> : null}
       < ListItems items={items} deleteItem={deleteItem}/>
       < AmplifySignOut />
