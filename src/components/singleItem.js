@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Storage} from 'aws-amplify';
 import { ReactComponent as Bin } from './svg/bin.svg';
 import { ReactComponent as Cloud } from './svg/download.svg';
@@ -10,18 +10,35 @@ import Col from 'react-bootstrap/Col';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useHistory } from "react-router-dom";
+import DeleteModal from './deleteModal';
 
 
 export default function SingleItem(props) {
 
+  const [show, setShow] = useState(false);
+
   let history = useHistory();
 
-  function handleClick() {
+  function editFile() {
     history.push('update/' + props.item.id)
   }
-  async function download() {
+
+  async function downloadFile() {
     const url = await Storage.get(props.item.filename);
     window.location.href = url;
+  }
+
+  function closeModal() {
+    setShow(false);
+  }
+
+  function deleteFile() {
+    closeModal();
+    props.deleteItem(props.item);
+  }
+
+  function confirmDelete() {
+    setShow(true);
   }
 
   function convertTime(time) {
@@ -32,24 +49,25 @@ export default function SingleItem(props) {
   }
 
   return (
+    <>
+    <DeleteModal show={show} deleteFile={deleteFile} close={closeModal}/>
     <Row className="item text-muted border-bottom align-items-center text-break mx-0">
       <Col sm={2}>{props.item.filename}</Col>
       <Col sm={2}><small>{props.item.username} {props.item.lastname}</small></Col>
       <Col sm={4}>{props.item.description ? props.item.description : '-'}</Col>
       <Col >{convertTime(props.item.updatedAt)}</Col>
-      <Col className="mr-auto"><small><Moment format="MMM Do YY">
-                {props.item.createdAt}
-            </Moment></small></Col>
+      <Col className="mr-auto">{convertTime(props.item.createdAt)}</Col>
       <Col sm={1} className="justify-content-end">
           <DropdownButton variant="light"
         id={'dropdown-basic-'+props.item.filename}
         drop="left"
         title={<Settings/>}>
-            <Dropdown.Item onClick={handleClick}><Pen className="mr-2"/><small>Update</small></Dropdown.Item>
-            <Dropdown.Item onClick={download}><Cloud className="mr-2"/> <small>Download</small></Dropdown.Item>
-            <Dropdown.Item onClick={() => props.deleteItem(props.item)}><Bin className="mr-2"/><small>Delete</small></Dropdown.Item>
+            <Dropdown.Item onClick={editFile}><Pen className="mr-2"/><small>Edit</small></Dropdown.Item>
+            <Dropdown.Item onClick={downloadFile}><Cloud className="mr-2"/><small>Download</small></Dropdown.Item>
+            <Dropdown.Item onClick={confirmDelete}><Bin className="mr-2"/><small>Delete</small></Dropdown.Item>
           </DropdownButton>
       </Col>
     </Row>
+    </>
   )
 }

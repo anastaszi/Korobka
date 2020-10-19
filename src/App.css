@@ -1,3 +1,4 @@
+
 .App {
   text-align: center;
 }
@@ -37,15 +38,11 @@
   }
 }
 
-.formBorder {
-    border-style: dashed !important;
-    border-width: 3px !important;
-}
-
 .item:hover {
   background-color: var(--light);
 }
 
+/* Modal  */
 .customModal {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0); /* Overlay effect: translucent background: black w/ partial opacity */
@@ -54,9 +51,28 @@
     bottom: 10px;
     right: 10px;
 }
-/* Modal content */
+
 .customModal-content {
     width: 20vw;
     max-width: 100%; /* Max width where it stops expanding */
+    margin: auto; /* Auto margin according to the element width */
+}
+
+/* Modal  */
+.deleteModal {
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.1); /* Overlay effect: translucent background: black w/ partial opacity */
+    width: 100vw;
+    height: 100vh;
+    z-index: 100; /* Overlay effect: positioned over other containers */
+    position: fixed; /* Fix position on the top-left corner*/
+    left: 0;
+    top: 0;
+    padding-top: 30vh;
+}
+
+.deleteModal-content {
+    background-color: white;
+    width: 20vw;
     margin: auto; /* Auto margin according to the element width */
 }
