@@ -29,7 +29,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/auth/korobka9db7badd-cloudformation-template.yml",
         "logicalId": "authkorobka9db7badd"
       },
-      "lastPushTimeStamp": "2020-10-18T18:29:29.793Z",
+      "lastPushTimeStamp": "2020-10-19T05:25:32.890Z",
       "output": {
         "AppClientSecret": "108ogqqdu01ia11h872hid9v07od27abh9qddle5ru517gqi1lac",
         "UserPoolId": "us-west-2_AkIvbMw7l",
@@ -63,8 +63,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apikorobka"
       },
-      "lastPushTimeStamp": "2020-10-18T18:29:31.210Z",
-      "lastPushDirHash": "Kp/6uy3pP+NI78e+I1LSDOziCYs="
+      "lastPushTimeStamp": "2020-10-19T05:25:33.921Z",
+      "lastPushDirHash": "g70aWkS93rKOlD+yMDLGc8MAtM8="
     }
   },
   "function": {
@@ -79,7 +79,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/function/S3Triggera83d04e6-cloudformation-template.json",
         "logicalId": "functionS3Triggera83d04e6"
       },
-      "lastPushTimeStamp": "2020-10-18T18:29:29.806Z",
+      "lastPushTimeStamp": "2020-10-19T05:25:32.906Z",
       "output": {
         "Region": "us-west-2",
         "Arn": "arn:aws:lambda:us-west-2:096360437466:function:S3Triggera83d04e6-master",
@@ -108,7 +108,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
         "logicalId": "storageshtuki"
       },
-      "lastPushTimeStamp": "2020-10-18T18:29:29.808Z",
+      "lastPushTimeStamp": "2020-10-19T05:25:32.909Z",
       "output": {
         "BucketName": "korobka48d121d45ebe456486a8adf23f6db64405605-master",
         "Region": "us-west-2"
