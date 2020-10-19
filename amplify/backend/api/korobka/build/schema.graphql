@@ -1,0 +1,189 @@
+type Item {
+  id: ID!
+  filename: String!
+  description: String
+  username: String!
+  lastname: String!
+  bucket: String!
+  region: String!
+  key: String
+  uploadTime: AWSTimestamp
+  updateTime: AWSTimestamp
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+input CreateItemInput {
+  id: ID
+  filename: String!
+  description: String
+  username: String
+  lastname: String
+  bucket: String
+  region: String
+  key: String
+  uploadTime: AWSTimestamp
+  updateTime: AWSTimestamp
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelItemConnection {
+  items: [Item]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelItemFilterInput {
+  id: ModelIDInput
+  filename: ModelStringInput
+  description: ModelStringInput
+  username: ModelStringInput
+  lastname: ModelStringInput
+  bucket: ModelStringInput
+  region: ModelStringInput
+  key: ModelStringInput
+  uploadTime: ModelIntInput
+  updateTime: ModelIntInput
+  and: [ModelItemFilterInput]
+  or: [ModelItemFilterInput]
+  not: ModelItemFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getItem(id: ID!): Item
+  listItems(filter: ModelItemFilterInput, limit: Int, nextToken: String): ModelItemConnection
+}
+
+input UpdateItemInput {
+  id: ID!
+  filename: String
+  description: String
+  username: String
+  lastname: String
+  bucket: String
+  region: String
+  key: String
+  uploadTime: AWSTimestamp
+  updateTime: AWSTimestamp
+}
+
+input DeleteItemInput {
+  id: ID
+}
+
+type Mutation {
+  createItem(input: CreateItemInput!, condition: ModelItemConditionInput): Item
+  updateItem(input: UpdateItemInput!, condition: ModelItemConditionInput): Item
+  deleteItem(input: DeleteItemInput!, condition: ModelItemConditionInput): Item
+}
+
+input ModelItemConditionInput {
+  filename: ModelStringInput
+  description: ModelStringInput
+  username: ModelStringInput
+  lastname: ModelStringInput
+  bucket: ModelStringInput
+  region: ModelStringInput
+  key: ModelStringInput
+  uploadTime: ModelIntInput
+  updateTime: ModelIntInput
+  and: [ModelItemConditionInput]
+  or: [ModelItemConditionInput]
+  not: ModelItemConditionInput
+}
+
+type Subscription {
+  onCreateItem(owner: String!): Item @aws_subscribe(mutations: ["createItem"])
+  onUpdateItem(owner: String!): Item @aws_subscribe(mutations: ["updateItem"])
+  onDeleteItem(owner: String!): Item @aws_subscribe(mutations: ["deleteItem"])
+}

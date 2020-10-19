@@ -1,0 +1,119 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-korobka-master-05605-authRole",
+      "UnauthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-master-05605-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::096360437466:role/amplify-korobka-master-05605-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-korobka-master-05605-deployment",
+      "UnauthRoleName": "amplify-korobka-master-05605-unauthRole",
+      "StackName": "amplify-korobka-master-05605",
+      "StackId": "arn:aws:cloudformation:us-west-2:096360437466:stack/amplify-korobka-master-05605/34caad40-0e81-11eb-8108-068b67c578d2",
+      "AmplifyAppId": "dggh20pjw9fb"
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "type": "cicd",
+      "lastPushTimeStamp": "2020-10-15T01:07:44.959Z"
+    }
+  },
+  "auth": {
+    "korobka9db7badd": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/auth/korobka9db7badd-cloudformation-template.yml",
+        "logicalId": "authkorobka9db7badd"
+      },
+      "lastPushTimeStamp": "2020-10-18T18:29:29.793Z",
+      "output": {
+        "AppClientSecret": "108ogqqdu01ia11h872hid9v07od27abh9qddle5ru517gqi1lac",
+        "UserPoolId": "us-west-2_AkIvbMw7l",
+        "AppClientIDWeb": "5ickg3672nufg9lbc1mq5b4ead",
+        "AppClientID": "4v7k6h96ctbqabf0ocbq76l1uo",
+        "IdentityPoolId": "us-west-2:029b1868-2876-40a2-9d79-c03d56f62b59",
+        "IdentityPoolName": "korobka9db7badd_identitypool_9db7badd__master",
+        "UserPoolName": "korobka9db7badd_userpool_9db7badd"
+      },
+      "lastPushDirHash": "fETPpRHrU8OWE+1xV/+/sZEkt7E="
+    }
+  },
+  "api": {
+    "korobka": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authkorobka9db7badd"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        },
+        "GraphQLAPIIdOutput": "kqosnlxbprc3robwhnynrognxa",
+        "GraphQLAPIEndpointOutput": "https://kqtwty7eijc5hhd74fx7z7vgp4.appsync-api.us-west-2.amazonaws.com/graphql"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apikorobka"
+      },
+      "lastPushTimeStamp": "2020-10-18T18:29:31.210Z",
+      "lastPushDirHash": "Kp/6uy3pP+NI78e+I1LSDOziCYs="
+    }
+  },
+  "function": {
+    "S3Triggera83d04e6": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true,
+      "lastBuildTimeStamp": "2020-10-15T06:34:16.618Z",
+      "lastPackageTimeStamp": "2020-10-15T06:34:16.666Z",
+      "distZipFilename": "S3Triggera83d04e6-666d4532572f7631314b-build.zip",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/function/S3Triggera83d04e6-cloudformation-template.json",
+        "logicalId": "functionS3Triggera83d04e6"
+      },
+      "lastPushTimeStamp": "2020-10-18T18:29:29.806Z",
+      "output": {
+        "Region": "us-west-2",
+        "Arn": "arn:aws:lambda:us-west-2:096360437466:function:S3Triggera83d04e6-master",
+        "Name": "S3Triggera83d04e6-master",
+        "LambdaExecutionRole": "S3Triggera83d04e6LambdaRolea83d04e6-master"
+      },
+      "lastPushDirHash": "ZuI802yDZFdIAIZMFfnVbLCU1wE="
+    }
+  },
+  "storage": {
+    "shtuki": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "S3Triggera83d04e6",
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ]
+        }
+      ],
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-korobka-master-05605-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+        "logicalId": "storageshtuki"
+      },
+      "lastPushTimeStamp": "2020-10-18T18:29:29.808Z",
+      "output": {
+        "BucketName": "korobka48d121d45ebe456486a8adf23f6db64405605-master",
+        "Region": "us-west-2"
+      },
+      "lastPushDirHash": "5hRujrE9BdgM+DbH9V54W8b2xSo="
+    }
+  }
+}

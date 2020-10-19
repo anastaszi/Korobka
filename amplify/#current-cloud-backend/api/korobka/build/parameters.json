@@ -1,0 +1,14 @@
+{
+    "CreateAPIKey": 0,
+    "AppSyncApiName": "korobka",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authkorobka9db7badd",
+            "Outputs.UserPoolId"
+        ]
+    },
+    "S3DeploymentBucket": "amplify-korobka-master-05605-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/198b74c5f8fa2604a380977d36811461870a6bdc"
+}
