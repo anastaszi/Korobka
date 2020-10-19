@@ -3,7 +3,7 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { API, Storage } from 'aws-amplify';
 
 import { listItems } from './graphql/queries';
-import { createItem as createItemMutation, deleteItem as deleteItemMutation } from './graphql/mutations';
+import { createItem as createItemMutation, deleteItem as deleteItemMutation, updateItem as updateItemMutation } from './graphql/mutations';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -32,7 +32,19 @@ function App() {
   async function createItem(selectedFile, fileData) {
     await Storage.put(selectedFile.name, selectedFile);
     await API.graphql({ query: createItemMutation, variables: { input: fileData } });
-    setItems([...items, fileData]);
+    fetchItems();
+  }
+
+  async function dublicateItem(selectedFile, fileData, id) {
+    await Storage.put(selectedFile.name, selectedFile);
+    const fileWithUpdated = {
+      id: id
+    }
+    if (fileData.description !== '') {
+      fileWithUpdated.description = fileData.description;
+    }
+    await API.graphql({ query: updateItemMutation, variables: { input: fileWithUpdated } });
+    fetchItems();
   }
 
   async function deleteItem({ filename, id }) {
@@ -48,7 +60,7 @@ return (
       <Row className="mx-0 mt-5">
         <Col><h1 className="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1></Col>
       </Row>
-      < AddItem createItem={createItem}/>
+      < AddItem items={items} createItem={createItem} dublicateItem={dublicateItem}/>
       < ListItems items={items} deleteItem={deleteItem}/>
       < AmplifySignOut />
     </ Container>

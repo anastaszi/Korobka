@@ -36,9 +36,9 @@ export default function SingleItem(props) {
       <Col sm={2}>{props.item.filename}</Col>
       <Col sm={2}><small>{props.item.username} {props.item.lastname}</small></Col>
       <Col sm={4}>{props.item.description ? props.item.description : '-'}</Col>
-      <Col >{convertTime(props.item.updateTime)}</Col>
+      <Col >{convertTime(props.item.updatedAt)}</Col>
       <Col className="mr-auto"><small><Moment format="MMM Do YY">
-                {props.item.uploadTime}
+                {props.item.createdAt}
             </Moment></small></Col>
       <Col sm={1} className="justify-content-end">
           <DropdownButton variant="light"

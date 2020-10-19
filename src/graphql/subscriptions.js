@@ -12,8 +12,6 @@ export const onCreateItem = /* GraphQL */ `
       bucket
       region
       key
-      uploadTime
-      updateTime
       createdAt
       updatedAt
       owner
@@ -31,8 +29,6 @@ export const onUpdateItem = /* GraphQL */ `
       bucket
       region
       key
-      uploadTime
-      updateTime
       createdAt
       updatedAt
       owner
@@ -50,8 +46,6 @@ export const onDeleteItem = /* GraphQL */ `
       bucket
       region
       key
-      uploadTime
-      updateTime
       createdAt
       updatedAt
       owner

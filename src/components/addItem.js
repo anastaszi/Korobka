@@ -6,7 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Loader from './loader.js';
+import Modal from './modal';
+import Loader from './loader';
 
 const initialFile = {
   filename: '',
@@ -15,7 +16,6 @@ const initialFile = {
   lastname: '',
   bucket: process.env.REACT_APP_S3,
   region:  process.env.REACT_APP_S3_REGION,
-  uploadTime: ''
 };
 
 
@@ -24,9 +24,10 @@ export default function AddItem(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [show, setShow] = useState(false);
   const formRef = useRef(null);
 
-  const {createItem} = props
+  const {createItem, items, dublicateItem} = props
 
   useEffect(() => {
     async function getUser() {
@@ -40,7 +41,7 @@ export default function AddItem(props) {
     if (initialFile.username === '') getUser();
   }, []);
 
-  async function addFile(e) {
+  function addFile(e) {
     const file = e.target.files[0];
     setSelectedFile(e.target.files[0]);
     if (!file) return;
@@ -54,7 +55,7 @@ export default function AddItem(props) {
     setDisabled(false);
   }
 
-  async function addDescription(e) {
+  function addDescription(e) {
     setFileData({...fileData, description: e.target.value})
   }
 
@@ -62,21 +63,40 @@ export default function AddItem(props) {
     formRef.current.reset();
   };
 
-  async function submitFile(event) {
-    event.preventDefault();
-    setLoading(true);
-    if (!selectedFile) return;
-    const currentFile = fileData;
-    currentFile.uploadTime = Date.now();
-    currentFile.updateTime = Date.now();
-    await createItem(selectedFile, currentFile);
+  const handleClose = () => setShow(!show);
+
+  function resetData() {
     setLoading(false);
     setFileData(initialFile);
     setDisabled(true);
     handleReset();
   }
 
+  async function submitFile(event) {
+    event.preventDefault();
+    if (!selectedFile) return;
+    setLoading(true);
+    var _dublicate = items.filter(function (el) {
+        return (el.filename === fileData.filename)
+    })
+    var dublicate = ""
+    if (_dublicate.length === 1) dublicate = _dublicate[0]
+
+    if(dublicate){
+      setShow(true);
+      await dublicateItem(selectedFile, fileData, dublicate.id);
+    } else {
+      await createItem(selectedFile, fileData);
+    }
+    resetData();
+  }
+
   return (
+    <>
+    <Modal show={show} handleClose={handleClose}>
+      <h5>Duplicate file upload</h5>
+      <p>You already have a version of this file. A new version has been attached to the original.</p>
+    </Modal>
     <Form onSubmit={submitFile} ref={formRef}>
       <Row className="align-items-center mx-0 my-4">
         <Col sm={4}>
@@ -99,5 +119,6 @@ export default function AddItem(props) {
             </Col>
           </Row>
     </Form>
+    </>
   )
 }

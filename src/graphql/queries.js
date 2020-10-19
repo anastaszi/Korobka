@@ -12,8 +12,6 @@ export const getItem = /* GraphQL */ `
       bucket
       region
       key
-      uploadTime
-      updateTime
       createdAt
       updatedAt
       owner
@@ -36,8 +34,6 @@ export const listItems = /* GraphQL */ `
         bucket
         region
         key
-        uploadTime
-        updateTime
         createdAt
         updatedAt
         owner

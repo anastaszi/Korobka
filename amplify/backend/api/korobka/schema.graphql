@@ -7,8 +7,6 @@ type Item @model @auth(rules: [{ allow: owner }]) {
   bucket: String!
   region: String!
   key: String
-  uploadTime: AWSTimestamp
-  updateTime: AWSTimestamp
 }
 
 input CreateItemInput {
@@ -20,6 +18,4 @@ input CreateItemInput {
   bucket: String
   region: String
   key: String
-  uploadTime: AWSTimestamp
-  updateTime: AWSTimestamp
 }
