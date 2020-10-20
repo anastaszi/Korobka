@@ -3,5 +3,13 @@
 }
 
 #fileImg {
-  font-size: 10em;
+  font-size: 12em;
+}
+
+#fileImg > svg {
+  vertical-align: baseline;
+}
+
+h1 > svg:hover {
+  cursor: pointer;
 }
