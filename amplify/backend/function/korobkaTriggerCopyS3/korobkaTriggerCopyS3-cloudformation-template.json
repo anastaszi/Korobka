@@ -176,7 +176,7 @@
       "DependsOn": [
         "LambdaExecutionRole"
       ],
-      "Type": "AWS::IAM::ManagedPolicy",
+      "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyName": "amplify-lambda-execution-policy",
         "Roles": [
