@@ -42,6 +42,7 @@ export default function AddItem(props) {
   }, []);
 
   useEffect(() => {
+    console.log(formErrors)
     if (Object.keys(formErrors).length === 0 && isSubmitting) {
       submitFile();
     }
@@ -93,11 +94,12 @@ export default function AddItem(props) {
 
 
   function validate () {
+    console.log("hello")
      let errors = {};
      if (!selectedFile)
         errors.file = "You haven't chose a file!";
-     if (selectedFile.file && selectedFile.file.size > 10 * 1024 * 1024)
-         errors.file = "This file is too big. Max size is 10Mb";
+     if (selectedFile.size > 10 * 1024 * 1024)
+        errors.file = "This file is too big. Max size is 10Mb";
      return errors;
    };
 
@@ -134,17 +136,18 @@ export default function AddItem(props) {
               onChange={handleChange}
               isInvalid={!!formErrors.file}
               feedback={formErrors.file}
+              className="text-truncate"
               feedbackTooltip
             />
         </Col>
-        <Col sm={6}>
+        <Col sm={5}>
             <Form.Group controlId="exampleForm.ControlTextarea1" className="m-0">
                 <Form.Control as="textarea" rows={1} placeholder="Add description" name="description" onChange={handleChange} />
             </Form.Group>
         </Col>
         <Col sm="auto">
             <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add file first' : (loading ? < Loader color="light" size="sm" type="border"/> : 'Submit new file')}
+              {disabled ? 'Add file first' : (loading ? < Loader color="light" size="sm" type="border"/> : 'Submit')}
             </Button>
             </Col>
           </Row>

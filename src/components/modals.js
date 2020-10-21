@@ -2,7 +2,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 
 export function Modal(props) {
-  console.log(props)
   var modal = (<div className="customModal">
                   <div className="customModal-content bg-info text-white rounded p-3">
                     <div>{props.children}</div>
@@ -15,7 +14,6 @@ export function Modal(props) {
 }
 
 export function DeleteModal(props) {
-  console.log(props)
   var modal = (<div className="deleteModal align-items-center">
                   <div className="deleteModal-content bg-light rounded p-3">
                     <div className="text-center mb-4">Are you sure you want to delete this file?</div>
