@@ -7,6 +7,9 @@
       "Default": "NONE",
       "Description": " Schedule Expression"
     },
+    "bucketName": {
+      "Type": "String"
+    },
     "env": {
       "Type": "String"
     },
@@ -83,7 +86,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-korobka-master-05605-deployment",
-          "S3Key": "amplify-builds/korobkaTriggerCopyS3-756f312f447147437a39-build.zip"
+          "S3Key": "amplify-builds/korobkaTriggerCopyS3-7758493959444f5a7431-build.zip"
         }
       }
     },
@@ -205,6 +208,45 @@
                       ":apis/",
                       {
                         "Ref": "apikorobkaGraphQLAPIIdOutput"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "S3CopyPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*Object"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "bucketName"
                       },
                       "/*"
                     ]

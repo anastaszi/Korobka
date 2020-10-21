@@ -47,8 +47,7 @@ export default function AddItem(props) {
     if (!file) return;
     setFileData((prevState) => { return ({
         ...prevState,
-        filename: file.name,
-        key: fileData.key + file.name,
+        filename: file.name
         })
       }
     );

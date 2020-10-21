@@ -1,90 +1,99 @@
 {
-   "Records":[
-      {
-         "eventID":"1",
-         "eventName":"INSERT",
-         "eventVersion":"1.0",
-         "eventSource":"aws:dynamodb",
-         "awsRegion":"us-east-1",
-         "dynamodb":{
-            "Keys":{
-               "Id":{
-                  "N":"101"
-               }
+    "Records": [
+        {
+            "eventID": "b06b62ca3f175b1c622a8d12ded6c0cb",
+            "eventName": "MODIFY",
+            "eventVersion": "1.1",
+            "eventSource": "aws:dynamodb",
+            "awsRegion": "us-west-2",
+            "dynamodb": {
+                "ApproximateCreationDateTime": 1603247810,
+                "Keys": {
+                    "id": {
+                        "S": "d0b1e293-3fc7-455d-96cf-1aaa7100f435"
+                    }
+                },
+                "NewImage": {
+                    "bucket": {
+                        "S": "korobka48d121d45ebe456486a8adf23f6db64405605-master"
+                    },
+                    "owner": {
+                        "S": "3ce89a05-7dd2-4296-a517-08a6e153314c"
+                    },
+                    "createdAt": {
+                        "S": "2020-10-21T02:36:39.322Z"
+                    },
+                    "filename": {
+                        "S": "01.txt"
+                    },
+                    "__typename": {
+                        "S": "Item"
+                    },
+                    "description": {
+                        "S": "new description"
+                    },
+                    "id": {
+                        "S": "d0b1e293-3fc7-455d-96cf-1aaa7100f435"
+                    },
+                    "region": {
+                        "S": "us-west-2"
+                    },
+                    "key": {
+                        "S": "private/us-west-2:48d936b8-1334-4e30-a47c-bed1d67a5eba/"
+                    },
+                    "lastname": {
+                        "S": "anastasba@gmail.com"
+                    },
+                    "updatedAt": {
+                        "S": "2020-10-21T02:36:50.423Z"
+                    },
+                    "username": {
+                        "S": "anastasba@gmail.com"
+                    }
+                },
+                "OldImage": {
+                    "bucket": {
+                        "S": "korobka48d121d45ebe456486a8adf23f6db64405605-master"
+                    },
+                    "owner": {
+                        "S": "3ce89a05-7dd2-4296-a517-08a6e153314c"
+                    },
+                    "createdAt": {
+                        "S": "2020-10-21T02:36:39.322Z"
+                    },
+                    "filename": {
+                        "S": "01.txt"
+                    },
+                    "__typename": {
+                        "S": "Item"
+                    },
+                    "description": {
+                        "S": "new file"
+                    },
+                    "id": {
+                        "S": "d0b1e293-3fc7-455d-96cf-1aaa7100f435"
+                    },
+                    "region": {
+                        "S": "us-west-2"
+                    },
+                    "key": {
+                        "S": "private/us-west-2:48d936b8-1334-4e30-a47c-bed1d67a5eba/"
+                    },
+                    "lastname": {
+                        "S": "anastasba@gmail.com"
+                    },
+                    "updatedAt": {
+                        "S": "2020-10-21T02:36:39.322Z"
+                    },
+                    "username": {
+                        "S": "anastasba@gmail.com"
+                    }
+                },
+                "SequenceNumber": "27361300000000024850820994",
+                "SizeBytes": 797,
+                "StreamViewType": "NEW_AND_OLD_IMAGES"
             },
-            "NewImage":{
-               "Message":{
-                  "S":"New item!"
-               },
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "SequenceNumber":"111",
-            "SizeBytes":26,
-            "StreamViewType":"NEW_AND_OLD_IMAGES"
-         },
-         "eventSourceARN":"stream-ARN"
-      },
-      {
-         "eventID":"2",
-         "eventName":"MODIFY",
-         "eventVersion":"1.0",
-         "eventSource":"aws:dynamodb",
-         "awsRegion":"us-east-1",
-         "dynamodb":{
-            "Keys":{
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "NewImage":{
-               "Message":{
-                  "S":"This item has changed"
-               },
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "OldImage":{
-               "Message":{
-                  "S":"New item!"
-               },
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "SequenceNumber":"222",
-            "SizeBytes":59,
-            "StreamViewType":"NEW_AND_OLD_IMAGES"
-         },
-         "eventSourceARN":"stream-ARN"
-      },
-      {
-         "eventID":"3",
-         "eventName":"REMOVE",
-         "eventVersion":"1.0",
-         "eventSource":"aws:dynamodb",
-         "awsRegion":"us-east-1",
-         "dynamodb":{
-            "Keys":{
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "OldImage":{
-               "Message":{
-                  "S":"This item has changed"
-               },
-               "Id":{
-                  "N":"101"
-               }
-            },
-            "SequenceNumber":"333",
-            "SizeBytes":38,
-            "StreamViewType":"NEW_AND_OLD_IMAGES"
-         },
-         "eventSourceARN":"stream-ARN"
-      }
-   ]
+            "eventSourceARN": "arn:aws:dynamodb:us-west-2:096360437466:table/Item-kqosnlxbprc3robwhnynrognxa-master/stream/2020-10-15T06:35:17.720"
+        }
+    ]
 }

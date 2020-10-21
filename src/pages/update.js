@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 import '../App.css';
 import { ReactComponent as Logo} from '../logo.svg';
 import Loader from '../components/loader';
+import {SuccessModal as Modal} from '../components/modals';
 import { updateItem as updateItemMutation } from '../graphql/mutations';
 
 export default function Update(props) {
@@ -24,6 +25,7 @@ export default function Update(props) {
   const [formValues, setFormValues] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   let history = useHistory();
 
@@ -53,7 +55,8 @@ export default function Update(props) {
 
   function submitChanges(event) {
     updateItem();
-    setTimeout(() => {history.push('/')}, 3000);
+    setShowModal(true);
+    setTimeout(() => {history.push('/')}, 500);
   }
 
   function handleSubmit (event) {
@@ -78,7 +81,7 @@ export default function Update(props) {
       errors.filename = "Invalid filename format";
     }
     if (formValues.file) {
-      if (formValues.file.name != currentItem.filename)
+      if (formValues.file.name !== currentItem.filename)
         errors.file = "Looks like you chose completely different file... Try again!"
       else if (formValues.file.size > 10 * 1024 * 1024)
         errors.file = "This file is too big. Max size is 10Mb";
@@ -115,6 +118,7 @@ export default function Update(props) {
 
   return (
     <>
+    <Modal show={showModal}/>
     <Container fluid="sm">
       <Row className="mx-0 mt-5">
         <Col><h1 className="display-3 text-dark" id="updateLogo">

@@ -226,6 +226,23 @@
 				"AccelerateConfiguration" : {
 					"AccelerationStatus" : "Enabled"
 				},
+				"LifecycleConfiguration": {
+                    "Rules": [
+                        {
+                            "Id": "GlacierRule",
+                            "Status": "Enabled",
+                            "ExpirationInDays": "730",
+                            "Transitions": [
+																{"TransitionInDays": "75",
+																"StorageClass": "STANDARD_IA"},
+                                {
+                                  "TransitionInDays": "365",
+                                  "StorageClass": "GLACIER"
+                                }
+                            ]
+                        }
+                    ]
+        },
         "NotificationConfiguration": {
                     "LambdaConfigurations": [
                         {
