@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, Storage, graphqlOperation } from 'aws-amplify';
 import { getItem } from '../graphql/queries';
 import { useHistory } from "react-router-dom";
 import bsCustomFileInput from 'bs-custom-file-input';
@@ -10,27 +10,30 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import '../css/Update.css';
+import '../App.css';
 import { ReactComponent as Logo} from '../logo.svg';
 import Loader from '../components/loader';
+import { updateItem as updateItemMutation } from '../graphql/mutations';
 
 export default function Update(props) {
+  const initialState = {filename: '', description: '', file: null}
+
   const [currentItem, setCurrentItem] = useState();
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
-  const [formValues, setFormValues] = useState({filename: '', description: '', file: null});
+  const [formValues, setFormValues] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   let history = useHistory();
 
   useEffect(() => {
-    async function getItemInfo() {
-      const item = await API.graphql(graphqlOperation(getItem, { id: props.match.params.id } ));
-      setCurrentItem(item.data.getItem);
-      bsCustomFileInput.init();
-    }
-    getItemInfo();
+    bsCustomFileInput.init();
+    let mounted = true;
+    loadFileInfo(mounted)
+    return function cleanup() {
+            mounted = false
+        }
   }, []);
 
   useEffect(() => {
@@ -39,9 +42,18 @@ export default function Update(props) {
     }
   }, [formErrors]);
 
+  function loadFileInfo(mounted) {
+    API.graphql(graphqlOperation(getItem, { id: props.match.params.id } ))
+      .then((item) => {
+        if (mounted)
+          setCurrentItem(item.data.getItem);
+
+    }).catch((e) => console.log(e))
+  }
+
   function submitChanges(event) {
-    console.log(formValues);
-    //checkFilename();
+    updateItem();
+    setTimeout(() => {history.push('/')}, 3000);
   }
 
   function handleSubmit (event) {
@@ -54,108 +66,121 @@ export default function Update(props) {
    const { name, value } = event.target;
    if (name === 'file')
         setFormValues({ ...formValues, [name]: event.target.files[0] });
-   else if (name === 'filename') {
-        var filenameNoExpention = value.split('.')
-        if (filenameNoExpention.length > 2) {
-          filenameNoExpention.pop()
-        }
-        setFormValues({ ...formValues, [name]: filenameNoExpention.join('.') });
-   }
    else
       setFormValues({ ...formValues, [name]: value });
    setDisabled(false);
  };
 
- const validate = () => {
+ function validate () {
     let errors = {};
     var regex = /^[A-Za-z0-9\/\!\-\_\.\*\'\(\)]+$/g;
-    if (!regex.test(formValues.filename)) {
+    if (formValues.filename && !regex.test(formValues.filename)) {
       errors.filename = "Invalid filename format";
     }
+    if (formValues.file) {
+      if (formValues.file.name != currentItem.filename)
+        errors.file = "Looks like you chose completely different file... Try again!"
+      else if (formValues.file.size > 10 * 1024 * 1024)
+        errors.file = "This file is too big. Max size is 10Mb";
+      }
     return errors;
   };
 
-/*  async function dublicateItem(selectedFile, fileData, id) {
-    await Storage.put(selectedFile.name, selectedFile);
-    const fileWithUpdated = {
-      id: id
+
+  async function updateItem() {
+    if (formValues.file) {
+      await Storage.put(formValues.file.name, formValues.file).catch((e) => console.log("Smth Went Wrong"))
     }
-    if (fileData.description !== '') {
-      fileWithUpdated.description = fileData.description;
+    const fileWithUpdated = {
+      id: currentItem.id
+    }
+    if (formValues.description !== '') {
+      fileWithUpdated.description = formValues.description;
+    }
+    if (formValues.filename != '') {
+      fileWithUpdated.filename = formValues.filename;
     }
     await API.graphql({ query: updateItemMutation, variables: { input: fileWithUpdated } });
-    fetchItems();
-  }*/
+  }
+
+  const defaultNameInput = <Form.Control as="textarea" rows={1} placeholder="Loading data..."/>
+
+  const customizedNameInput = <Form.Control as="textarea"
+    rows={1}
+    name="filename"
+    onChange={handleChange}
+    defaultValue={currentItem ? currentItem.filename : "Loading data..."}
+    isInvalid={!!formErrors.filename}
+  />
 
   return (
+    <>
     <Container fluid="sm">
       <Row className="mx-0 mt-5">
-        <Col><h1 className="display-3 text-dark">
+        <Col><h1 className="display-3 text-dark" id="updateLogo">
           <Logo className="mr-3" onClick={() => history.push('/')} id="logo-back"/>Update File</h1>
         </Col>
       </Row>
-          <Form onSubmit={handleSubmit} noValidate>
-            <Form.Group controlId="update-name" className="m-0">
-              <Row className="align-items-center mx-0 my-4">
-                <Col xs={2} className="text-right">
-                  <Form.Label>Rename:</Form.Label>
-                </Col>
-                <Col xs={6} className="mr-auto">
-                    <Form.Control as="textarea"
-                      rows={1}
-                      name="filename"
-                      placeholder={currentItem ? currentItem.filename : "Loading data..."}
-                      onChange={handleChange}
-                      isInvalid={!!formErrors.filename}
-                    />
-                    <Form.Text className="text-muted">
-                     Use Alphanumeric characters and '/!-_.*()
-                    </Form.Text>
-                    <Form.Control.Feedback type="invalid">
-                      Please provide a filename.
-                    </Form.Control.Feedback>
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="update-description" className="m-0">
-              <Row className="align-items-center mx-0 my-4">
-                <Col xs={2} className="text-right">
-                  <Form.Label>Update description:</Form.Label>
-                </Col>
-                <Col xs={6} className="mr-auto">
-                    <Form.Control as="textarea"
-                      name="description"
-                      rows={1}
-                      placeholder={currentItem ? currentItem.description : "Loading data..."}
-                      onChange={handleChange}
-                    />
-                </Col>
-              </Row>
-            </Form.Group>
-            <Form.Group controlId="update-file-group" className="m-0">
-              <Row className="align-items-center mx-0 my-4">
-                <Col xs={2} className="text-right">
-                  <Form.Label>New version:</Form.Label>
-                </Col>
-                <Col xs={6} className="mr-auto">
-                  <Form.File
-                    name="file"
-                    id="update-file"
-                    label={currentItem ? "Version is not yet changed" : "Loading data..."}
-                    custom
-                    onChange={handleChange}
-                  />
-                </Col>
-              </Row>
-            </Form.Group>
-            <Row className="mx-0 my-4">
-              <Col xs={8} className="text-right">
-                <Button variant="secondary" type="submit" disabled={disabled}>
-                  {disabled ? 'Add Updates First' : (loading ? < Loader /> : 'Submit Changes')}
-                </Button>
-              </Col>
-            </Row>
-          </Form>
+      <Form onSubmit={handleSubmit} noValidate>
+        <Form.Group controlId="update-name" className="m-0">
+          <Row className="align-items-center mx-0 my-4">
+            <Col xs={2} className="text-right">
+              <Form.Label>Rename:</Form.Label>
+            </Col>
+            <Col xs={6} className="mr-auto">
+                {currentItem ? customizedNameInput : defaultNameInput}
+                <Form.Text className="text-muted">
+                 Use Alphanumeric characters and '/!-_.*()
+                </Form.Text>
+                <Form.Control.Feedback type="invalid" tooltip>
+                  Please provide valid name
+                </Form.Control.Feedback>
+            </Col>
+          </Row>
+        </Form.Group>
+        <Form.Group controlId="update-description" className="m-0">
+          <Row className="align-items-center mx-0 my-4">
+            <Col xs={2} className="text-right">
+              <Form.Label>Update description:</Form.Label>
+            </Col>
+            <Col xs={6} className="mr-auto">
+                <Form.Control as="textarea"
+                  name="description"
+                  rows={1}
+                  placeholder={currentItem ? currentItem.description : "Loading data..."}
+                  onChange={handleChange}
+                />
+            </Col>
+          </Row>
+        </Form.Group>
+        <Form.Group controlId="update-file-group" className="m-0">
+          <Row className="align-items-center mx-0 my-4">
+            <Col xs={2} className="text-right">
+              <Form.Label>New version:</Form.Label>
+            </Col>
+            <Col xs={6} className="mr-auto">
+              <Form.File
+                name="file"
+                id="update-file"
+                label={formValues.file ? formValues.file.name: "Version is not yet changed"}
+                custom
+                onChange={handleChange}
+                isInvalid={!!formErrors.file}
+                feedback={formErrors.file}
+                feedbackTooltip
+              />
+            </Col>
+          </Row>
+        </Form.Group>
+        <Row className="mx-0 my-4">
+          <Col xs={8} className="text-right">
+            <Button variant="secondary" type="submit" disabled={disabled}>
+              {disabled ? 'Add Updates First' : (loading ? < Loader /> : 'Submit Changes')}
+            </Button>
+          </Col>
+        </Row>
+      </Form>
     </Container>
+    </>
   )
 }

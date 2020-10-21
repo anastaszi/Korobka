@@ -18,15 +18,19 @@ Storage.configure({ level: 'private' });
 
 function App() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchItems();
   }, []);
 
   async function fetchItems() {
+    setLoading(true);
     const apiData = await API.graphql({ query: listItems });
     const itemsFromAPI = apiData.data.listItems.items;
     setItems(itemsFromAPI);
+    setLoading(false);
+    console.log(Storage)
   }
 
   async function createItem(selectedFile, fileData) {
@@ -52,6 +56,7 @@ function App() {
     setItems(newItemsArray);
     Storage.remove(filename).catch(err => console.log(err));
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
+    console.log(Storage.configure())
   }
 
 
@@ -61,7 +66,7 @@ return (
         <Col><h1 className="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1></Col>
       </Row>
       < AddItem items={items} createItem={createItem} dublicateItem={dublicateItem}/>
-      < ListItems items={items} deleteItem={deleteItem}/>
+      < ListItems items={items} deleteItem={deleteItem} show={loading}/>
       < AmplifySignOut />
     </ Container>
   )

@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useHistory } from "react-router-dom";
-import DeleteModal from './deleteModal';
+import { DeleteModal } from './modals';
 
 
 export default function SingleItem(props) {

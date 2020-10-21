@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Modal from './modal';
+import { Modal } from './modals';
 import Loader from './loader';
 
 const initialFile = {
@@ -80,8 +80,7 @@ export default function AddItem(props) {
         return (el.filename === fileData.filename)
     })
     var dublicate = ""
-    if (_dublicate.length === 1) dublicate = _dublicate[0]
-
+    if (_dublicate.length > 0) dublicate = _dublicate[0]
     if(dublicate){
       setShow(true);
       await dublicateItem(selectedFile, fileData, dublicate.id);
@@ -114,7 +113,7 @@ export default function AddItem(props) {
         </Col>
         <Col sm="auto">
             <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add file first' : (loading ? < Loader /> : 'Submit new file')}
+              {disabled ? 'Add file first' : (loading ? < Loader color="info" size="sm" type="border"/> : 'Submit new file')}
             </Button>
             </Col>
           </Row>
