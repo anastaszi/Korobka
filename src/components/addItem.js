@@ -25,55 +25,83 @@ export default function AddItem(props) {
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [show, setShow] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
   const formRef = useRef(null);
 
   const {createItem, items, dublicateItem} = props
 
   useEffect(() => {
-    async function getUser() {
-      const user = await Auth.currentUserInfo();
-      initialFile.username = user.attributes.email;
-      initialFile.lastname = user.attributes.email;
-      initialFile.key = `private/${user.id}/`
-      setFileData(initialFile);
-      bsCustomFileInput.init();
-    }
-    if (initialFile.username === '') getUser();
+    bsCustomFileInput.init();
+    let mounted = true;
+    if (initialFile.username === '')
+      loadUserInfo(mounted);;
+    return function cleanup() {
+            mounted = false;
+        }
   }, []);
 
-  function addFile(e) {
-    const file = e.target.files[0];
-    setSelectedFile(e.target.files[0]);
-    if (!file) return;
-    setFileData((prevState) => { return ({
-        ...prevState,
-        filename: file.name
-        })
-      }
-    );
-    setDisabled(false);
+  useEffect(() => {
+    if (Object.keys(formErrors).length === 0 && isSubmitting) {
+      submitFile();
+    }
+  }, [formErrors]);
+
+  function loadUserInfo(mounted) {
+    Auth.currentUserInfo()
+      .then((user) => {
+        initialFile.username = user.attributes.email;
+        initialFile.lastname = user.attributes.email;
+        initialFile.key = `private/${user.id}/`;
+        if (mounted)
+          setFileData(initialFile);
+      }).catch((e) => console.log(e))
   }
 
-  function addDescription(e) {
-    setFileData({...fileData, description: e.target.value})
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (name === 'filename') {
+      const file = event.target.files[0];
+      setSelectedFile(event.target.files[0]);
+      if (!file) return;
+      setFileData({ ...fileData, [name]: file.name });
+      setDisabled(false);
+    }
+    else
+       setFileData({ ...fileData, [name]: value });
   }
-
-  const handleReset = () => {
-    formRef.current.reset();
-  };
 
   const handleClose = () => setShow(!show);
+
+  function handleSubmit (event) {
+    event.preventDefault();
+    setFormErrors(validate());
+    setIsSubmitting(true);
+  };
+
+  const resetForm = () => {
+    formRef.current.reset();
+  };
 
   function resetData() {
     setLoading(false);
     setFileData(initialFile);
     setDisabled(true);
-    handleReset();
+    setIsSubmitting(false);
+    resetForm();
   }
 
+
+  function validate () {
+     let errors = {};
+     if (!selectedFile)
+        errors.file = "You haven't chose a file!";
+     if (selectedFile.file && selectedFile.file.size > 10 * 1024 * 1024)
+         errors.file = "This file is too big. Max size is 10Mb";
+     return errors;
+   };
+
   async function submitFile(event) {
-    event.preventDefault();
-    if (!selectedFile) return;
     setLoading(true);
     var _dublicate = items.filter(function (el) {
         return (el.filename === fileData.filename)
@@ -95,24 +123,28 @@ export default function AddItem(props) {
       <h5>Duplicate file upload</h5>
       <p>You already have a version of this file. A new version has been attached to the original.</p>
     </Modal>
-    <Form onSubmit={submitFile} ref={formRef}>
+    <Form onSubmit={handleSubmit} ref={formRef} noValidate>
       <Row className="align-items-center mx-0 my-4">
         <Col sm={4}>
             <Form.File
+              name="filename"
               id="custom-file"
               label="No file selected..."
               custom
-              onChange={addFile}
+              onChange={handleChange}
+              isInvalid={!!formErrors.file}
+              feedback={formErrors.file}
+              feedbackTooltip
             />
         </Col>
         <Col sm={6}>
             <Form.Group controlId="exampleForm.ControlTextarea1" className="m-0">
-                <Form.Control as="textarea" rows={1} placeholder="Add description" onChange={addDescription} />
+                <Form.Control as="textarea" rows={1} placeholder="Add description" name="description" onChange={handleChange} />
             </Form.Group>
         </Col>
         <Col sm="auto">
             <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add file first' : (loading ? < Loader color="info" size="sm" type="border"/> : 'Submit new file')}
+              {disabled ? 'Add file first' : (loading ? < Loader color="light" size="sm" type="border"/> : 'Submit new file')}
             </Button>
             </Col>
           </Row>

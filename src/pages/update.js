@@ -34,7 +34,7 @@ export default function Update(props) {
     let mounted = true;
     loadFileInfo(mounted)
     return function cleanup() {
-            mounted = false
+            mounted = false;
         }
   }, []);
 
@@ -179,7 +179,7 @@ export default function Update(props) {
         <Row className="mx-0 my-4">
           <Col xs={8} className="text-right">
             <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add Updates First' : (loading ? < Loader /> : 'Submit Changes')}
+              {disabled ? 'Add Updates First' : (loading ? < Loader color="light" size="sm" type="border" /> : 'Submit Changes')}
             </Button>
           </Col>
         </Row>

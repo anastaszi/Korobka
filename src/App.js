@@ -36,6 +36,9 @@ function App() {
   async function createItem(selectedFile, fileData) {
     await Storage.put(selectedFile.name, selectedFile);
     await API.graphql({ query: createItemMutation, variables: { input: fileData } });
+    var submittedFile = fileData;
+    submittedFile.createdAt = Date.now();
+    submittedFile.updatedAt = submittedFile.createdAt;
     fetchItems();
   }
 
@@ -56,7 +59,6 @@ function App() {
     setItems(newItemsArray);
     Storage.remove(filename).catch(err => console.log(err));
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
-    console.log(Storage.configure())
   }
 
 
