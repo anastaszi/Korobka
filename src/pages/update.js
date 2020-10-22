@@ -100,7 +100,7 @@ export default function Update(props) {
     if (formValues.description !== '') {
       fileWithUpdated.description = formValues.description;
     }
-    if (formValues.filename != '') {
+    if (formValues.filename !== '') {
       fileWithUpdated.filename = formValues.filename;
     }
     await API.graphql({ query: updateItemMutation, variables: { input: fileWithUpdated } });

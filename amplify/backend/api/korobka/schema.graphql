@@ -1,4 +1,4 @@
-type Item @model @auth(rules: [{ allow: owner }]) {
+type Item @model @auth(rules: [{ allow: owner }, { allow: groups, groups: ["Admins"] }]) {
   id: ID!
   filename: String!
   description: String

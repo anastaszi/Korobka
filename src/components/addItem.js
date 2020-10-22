@@ -54,6 +54,7 @@ export default function AddItem(props) {
         initialFile.username = user.attributes.email;
         initialFile.lastname = user.attributes.email;
         initialFile.key = `private/${user.id}/`;
+        console.log(user)
         if (mounted)
           setFileData(initialFile);
       }).catch((e) => console.log(e))

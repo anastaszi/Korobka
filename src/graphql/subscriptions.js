@@ -2,7 +2,7 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateItem = /* GraphQL */ `
-  subscription OnCreateItem($owner: String!) {
+  subscription OnCreateItem($owner: String) {
     onCreateItem(owner: $owner) {
       id
       filename
@@ -19,7 +19,7 @@ export const onCreateItem = /* GraphQL */ `
   }
 `;
 export const onUpdateItem = /* GraphQL */ `
-  subscription OnUpdateItem($owner: String!) {
+  subscription OnUpdateItem($owner: String) {
     onUpdateItem(owner: $owner) {
       id
       filename
@@ -36,7 +36,7 @@ export const onUpdateItem = /* GraphQL */ `
   }
 `;
 export const onDeleteItem = /* GraphQL */ `
-  subscription OnDeleteItem($owner: String!) {
+  subscription OnDeleteItem($owner: String) {
     onDeleteItem(owner: $owner) {
       id
       filename
