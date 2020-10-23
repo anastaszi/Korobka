@@ -49,6 +49,7 @@ export default function Update(props) {
       .then((item) => {
         if (mounted)
           setCurrentItem(item.data.getItem);
+        console.log(item.data.getItem)
 
     }).catch((e) => console.log(e))
   }

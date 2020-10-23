@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { API, Storage } from 'aws-amplify';
+import { API, Auth, Storage } from 'aws-amplify';
 
 import { listItems } from './graphql/queries';
 import { createItem as createItemMutation, deleteItem as deleteItemMutation, updateItem as updateItemMutation } from './graphql/mutations';
@@ -21,6 +21,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+      Auth.currentSession().then((data) => console.log(data.idToken.payload["cognito:groups"]))
     fetchItems();
   }, []);
 
