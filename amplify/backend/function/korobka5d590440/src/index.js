@@ -3,27 +3,16 @@ const s3 = new AWS.S3();
 
 exports.handler = async (event) => {
   console.log(event.Records[0])
-  console.log(event.Records[0].eventName)
-  /*
+  console.log(event.Records[0].eventName === 'REMOVE')
+
   if (event && event.Records && (event.Records[0].eventName === 'MODIFY')) {
     var action = event.Records[0].dynamodb;
-    var newRecordName = action.NewImage.filename.S;
-    var oldRecordName = action.OldImage.filename.S;
-    var updatedFileName = (newRecordName !== oldRecordName);
-    if (updatedFileName) {
-      const path = action.NewImage.key.S;
-      const oldKey = oldRecordName;
-      const newKey = newRecordName;
-      const newPath = path +  "/" + newKey;
-      const oldPath = path + "/" + oldKey;
-      const copySrc = process.env.STORAGE_SHTUKI_BUCKETNAME + "/" + path + "/" + oldKey;
-
-
-      var copy_params = {
-        Bucket: process.env.STORAGE_SHTUKI_BUCKETNAME,
-        CopySource: encodeURI(copySrc),
-        Key: newPath
-      };
+    var recordFileName = action.OldImage.filename.S;
+    var path = action.OldImage.key.S + "/" + recordFileName;
+    console.log(path)
+    console.log(recordFileName)
+    console.log(action)
+    /*
 
       var del_params = {
         Bucket: process.env.STORAGE_SHTUKI_BUCKETNAME,
@@ -40,8 +29,8 @@ exports.handler = async (event) => {
            return;
        }
      }
+     */
   }
-*/
 
   return Promise.resolve("Just started");
 };
