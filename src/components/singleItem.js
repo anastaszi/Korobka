@@ -14,7 +14,6 @@ import { DeleteModal } from './modals';
 
 
 export default function SingleItem(props) {
-
   const [show, setShow] = useState(false);
 
   let history = useHistory();
@@ -62,7 +61,7 @@ export default function SingleItem(props) {
         id={'dropdown-basic-'+props.item.filename}
         drop="left"
         title={<Settings/>}>
-            <Dropdown.Item onClick={editFile}><Pen className="mr-2"/><small>Edit</small></Dropdown.Item>
+            {(props.currentUser === props.item.owner) ? <Dropdown.Item onClick={editFile}><Pen className="mr-2"/><small>Edit</small></Dropdown.Item> : ''}
             <Dropdown.Item onClick={downloadFile}><Cloud className="mr-2"/><small>Download</small></Dropdown.Item>
             <Dropdown.Item onClick={confirmDelete}><Bin className="mr-2"/><small>Delete</small></Dropdown.Item>
           </DropdownButton>

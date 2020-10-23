@@ -13,25 +13,28 @@ import './App.css';
 import ListItems from './components/listItems.js';
 import AddItem from './components/addItem';
 import { ReactComponent as Logo} from './logo.svg';
+import {ReactComponent as AdminLogo} from './components/svg/admin.svg';
 
 Storage.configure({ level: 'private' });
 
 function App() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
-      Auth.currentSession().then((data) => console.log(data.idToken.payload["cognito:groups"]))
     fetchItems();
   }, []);
 
   async function fetchItems() {
     setLoading(true);
+    const userInfo = (await Auth.currentSession()).idToken.payload;
+    setCurrentUser({user: userInfo["cognito:username"], group: userInfo["cognito:groups"]})
     const apiData = await API.graphql({ query: listItems });
     const itemsFromAPI = apiData.data.listItems.items;
     setItems(itemsFromAPI);
     setLoading(false);
-    console.log(Storage)
+    console.log(currentUser)
   }
 
   async function createItem(selectedFile, fileData) {
@@ -62,16 +65,21 @@ function App() {
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
   }
 
+  const adminMark = <div className="admin-logo"><AdminLogo /></div>
+
 
 return (
+  <>
+    {(currentUser.group && (currentUser.group[0] === 'Admins')) ? adminMark : ''}
     <Container fluid="sm">
       <Row className="mx-0 mt-5">
         <Col><h1 className="display-3 text-dark"><Logo className="mr-3"/>Korobka Storage</h1></Col>
       </Row>
       < AddItem items={items} createItem={createItem} dublicateItem={dublicateItem}/>
-      < ListItems items={items} deleteItem={deleteItem} show={loading}/>
+      < ListItems items={items} deleteItem={deleteItem} show={loading} user={currentUser.user}/>
       < AmplifySignOut />
     </ Container>
+    </>
   )
 }
 

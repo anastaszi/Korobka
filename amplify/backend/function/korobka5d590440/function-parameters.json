@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "storage": {
+      "shtuki": [
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "korobka0d2ab25b",
+      "version": 1
+    }
+  ]
+}

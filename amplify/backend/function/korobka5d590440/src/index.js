@@ -2,6 +2,9 @@ const AWS = require('aws-sdk')
 const s3 = new AWS.S3();
 
 exports.handler = async (event) => {
+  console.log(event.Records[0])
+  console.log(event.Records[0].eventName)
+  /*
   if (event && event.Records && (event.Records[0].eventName === 'MODIFY')) {
     var action = event.Records[0].dynamodb;
     var newRecordName = action.NewImage.filename.S;
@@ -38,7 +41,7 @@ exports.handler = async (event) => {
        }
      }
   }
+*/
 
-
-  return Promise.resolve("No modification");
+  return Promise.resolve("Just started");
 };

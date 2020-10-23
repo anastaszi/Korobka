@@ -65,3 +65,13 @@
 #updateLogo > svg:hover {
   cursor: pointer;
 }
+
+.admin-logo {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0); /* Overlay effect: translucent background: black w/ partial opacity */
+  z-index: 5; /* Overlay effect: positioned over other containers */
+  width: 10em;
+}

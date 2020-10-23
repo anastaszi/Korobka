@@ -42,7 +42,6 @@ export default function AddItem(props) {
   }, []);
 
   useEffect(() => {
-    console.log(formErrors)
     if (Object.keys(formErrors).length === 0 && isSubmitting) {
       submitFile();
     }
@@ -54,7 +53,6 @@ export default function AddItem(props) {
         initialFile.username = user.attributes.email;
         initialFile.lastname = user.attributes.email;
         initialFile.key = `private/${user.id}`;
-        console.log(user)
         if (mounted)
           setFileData(initialFile);
       }).catch((e) => console.log(e))
@@ -95,7 +93,6 @@ export default function AddItem(props) {
 
 
   function validate () {
-    console.log("hello")
      let errors = {};
      if (!selectedFile)
         errors.file = "You haven't chose a file!";
