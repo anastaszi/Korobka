@@ -2,9 +2,26 @@
   "permissions": {
     "api": {
       "korobka": [
-        "update"
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "shtuki": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     }
   },
-  "lambdaLayers": []
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "korobka0d2ab25b",
+      "version": 1
+    }
+  ]
 }

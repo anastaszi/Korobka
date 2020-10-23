@@ -48,8 +48,27 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput"
           ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "shtuki",
+          "attributes": [
+            "BucketName"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "korobka0d2ab25b",
+          "attributes": [
+            "Arn"
+          ]
         }
       ]
+    },
+    "korobka0d2ab25b": {
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer",
+      "build": true
     }
   },
   "storage": {

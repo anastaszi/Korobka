@@ -20,6 +20,28 @@
       },
       "auth": {
         "korobka9db7badd": {}
+      },
+      "function": {
+        "korobka0d2ab25b": {
+          "deploymentBucketName": "amplify-korobka-master-05605-deployment",
+          "s3Key": "amplify-builds/korobka0d2ab25b-build.zip"
+        }
+      }
+    },
+    "nonCFNdata": {
+      "function": {
+        "korobka0d2ab25b": {
+          "layerVersionMap": {
+            "1": {
+              "permissions": [
+                {
+                  "type": "private"
+                }
+              ],
+              "hash": "62ZFg5PZKDJDsUdsS+5Git0fxxUf5MBd8O4iKfJ46O0="
+            }
+          }
+        }
       }
     }
   },

@@ -20,6 +20,14 @@
     "apikorobkaGraphQLAPIEndpointOutput": {
       "Type": "String",
       "Default": "apikorobkaGraphQLAPIEndpointOutput"
+    },
+    "functionkorobka0d2ab25bArn": {
+      "Type": "String",
+      "Default": "functionkorobka0d2ab25bArn"
+    },
+    "storageshtukiBucketName": {
+      "Type": "String",
+      "Default": "storageshtukiBucketName"
     }
   },
   "Conditions": {
@@ -72,6 +80,9 @@
             },
             "API_KOROBKA_GRAPHQLAPIENDPOINTOUTPUT": {
               "Ref": "apikorobkaGraphQLAPIEndpointOutput"
+            },
+            "STORAGE_SHTUKI_BUCKETNAME": {
+              "Ref": "storageshtukiBucketName"
             }
           }
         },
@@ -82,11 +93,15 @@
           ]
         },
         "Runtime": "nodejs12.x",
-        "Layers": [],
+        "Layers": [
+          {
+            "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:korobka0d2ab25b-master:1"
+          }
+        ],
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-korobka-master-05605-deployment",
-          "S3Key": "amplify-builds/korobkaTriggerCopyS3-7758493959444f5a7431-build.zip"
+          "S3Key": "amplify-builds/korobkaTriggerCopyS3-574b562b334758666949-build.zip"
         }
       }
     },
@@ -190,7 +205,13 @@
             {
               "Effect": "Allow",
               "Action": [
-                "appsync:Update*"
+                "appsync:Create*",
+                "appsync:StartSchemaCreation",
+                "appsync:GraphQL",
+                "appsync:Get*",
+                "appsync:List*",
+                "appsync:Update*",
+                "appsync:Delete*"
               ],
               "Resource": [
                 {
@@ -208,6 +229,29 @@
                       ":apis/",
                       {
                         "Ref": "apikorobkaGraphQLAPIIdOutput"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:DeleteObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storageshtukiBucketName"
                       },
                       "/*"
                     ]
@@ -247,6 +291,10 @@
                       "arn:aws:s3:::",
                       {
                         "Ref": "bucketName"
+                      },
+                      "-",
+                      {
+                        "Ref": "env"
                       },
                       "/*"
                     ]
