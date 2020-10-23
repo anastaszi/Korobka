@@ -101,7 +101,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-korobka-master-05605-deployment",
-          "S3Key": "amplify-builds/korobkaTriggerCopyS3-574b562b334758666949-build.zip"
+          "S3Key": "amplify-builds/korobkaTriggerCopyS3-364a363243576430587a-build.zip"
         }
       }
     },
@@ -243,7 +243,9 @@
                 "s3:GetObject",
                 "s3:ListBucket",
                 "s3:DeleteObject",
-                "s3:CopyObject"
+                "s3:CopyObject",
+                "s3:GetObjectTagging",
+                "s3:PutObjectTagging"
               ],
               "Resource": [
                 {
