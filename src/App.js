@@ -61,7 +61,7 @@ function App() {
   async function deleteItem({ filename, id }) {
     const newItemsArray = items.filter(note => note.id !== id);
     setItems(newItemsArray);
-    Storage.remove(filename).catch(err => console.log(err));
+    //Storage.remove(filename).catch(err => console.log(err));
     await API.graphql({ query: deleteItemMutation, variables: { input: { id } }});
   }
 

@@ -92,7 +92,7 @@
         "Timeout": "25",
         "Code": {
           "S3Bucket": "amplify-korobka-master-05605-deployment",
-          "S3Key": "amplify-builds/korobka5d590440-3070646558707a457830-build.zip"
+          "S3Key": "amplify-builds/korobka5d590440-5a7a547354384f714168-build.zip"
         }
       }
     },
