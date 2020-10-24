@@ -2,23 +2,19 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import Update from './pages/update'
+import AuthStateApp from './App';
 import * as serviceWorker from './serviceWorker';
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import Container from 'react-bootstrap/Container';
 Amplify.configure(awsconfig);
+
 
 ReactDOM.render(
   <React.StrictMode>
-  <Router>
-           <Switch>
-            <Route exact path="/" component={App} />
-            <Route path="/update/:id" component={Update} />
-            <Route component={App} />
-           </Switch>
-    </Router>
+    <Container fluid="sm">
+      < AuthStateApp />
+    </ Container>
   </React.StrictMode>,
   document.getElementById('root')
 );

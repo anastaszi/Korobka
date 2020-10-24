@@ -32,6 +32,7 @@ export default function AddItem(props) {
   const {createItem, items, dublicateItem} = props
 
   useEffect(() => {
+    console.log(props)
     bsCustomFileInput.init();
     let mounted = true;
     if (initialFile.username === '')

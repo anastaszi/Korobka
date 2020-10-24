@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { API, Storage, graphqlOperation } from 'aws-amplify';
-import { getItem } from '../graphql/queries';
-import { useHistory } from "react-router-dom";
 import bsCustomFileInput from 'bs-custom-file-input';
 
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import '../App.css';
-import { ReactComponent as Logo} from '../logo.svg';
 import Loader from '../components/loader';
 import {SuccessModal as Modal} from '../components/modals';
 import { updateItem as updateItemMutation } from '../graphql/mutations';
@@ -27,12 +23,10 @@ export default function Update(props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  let history = useHistory();
-
   useEffect(() => {
     bsCustomFileInput.init();
     let mounted = true;
-    loadFileInfo(mounted)
+    setCurrentItem(props.item);
     return function cleanup() {
             mounted = false;
         }
@@ -44,20 +38,13 @@ export default function Update(props) {
     }
   }, [formErrors]);
 
-  function loadFileInfo(mounted) {
-    API.graphql(graphqlOperation(getItem, { id: props.match.params.id } ))
-      .then((item) => {
-        if (mounted)
-          setCurrentItem(item.data.getItem);
-        console.log(item.data.getItem)
-
-    }).catch((e) => console.log(e))
-  }
-
   function submitChanges(event) {
     updateItem();
     setShowModal(true);
-    setTimeout(() => {history.push('/')}, 500);
+    setTimeout(() => {
+      setShowModal(false);
+      props.update();
+    }, 500);
   }
 
   function handleSubmit (event) {
@@ -117,75 +104,79 @@ export default function Update(props) {
     isInvalid={!!formErrors.filename}
   />
 
-  return (
+  const updateModal = (
     <>
     <Modal show={showModal}/>
-    <Container fluid="sm">
-      <Row className="mx-0 mt-5">
-        <Col><h1 className="display-3 text-dark" id="updateLogo">
-          <Logo className="mr-3" onClick={() => history.push('/')} id="logo-back"/>Update File</h1>
-        </Col>
-      </Row>
-      <Form onSubmit={handleSubmit} noValidate>
-        <Form.Group controlId="update-name" className="m-0">
-          <Row className="align-items-center mx-0 my-4">
-            <Col xs={2} className="text-right">
-              <Form.Label>Rename:</Form.Label>
-            </Col>
-            <Col xs={6} className="mr-auto">
-                {currentItem ? customizedNameInput : defaultNameInput}
-                <Form.Text className="text-muted">
-                 Use Alphanumeric characters and '/!-_.*()
-                </Form.Text>
-                <Form.Control.Feedback type="invalid" tooltip>
-                  Please provide valid name
-                </Form.Control.Feedback>
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group controlId="update-description" className="m-0">
-          <Row className="align-items-center mx-0 my-4">
-            <Col xs={2} className="text-right">
-              <Form.Label>Update description:</Form.Label>
-            </Col>
-            <Col xs={6} className="mr-auto">
-                <Form.Control as="textarea"
-                  name="description"
-                  rows={1}
-                  placeholder={currentItem ? currentItem.description : "Loading data..."}
-                  onChange={handleChange}
-                />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Form.Group controlId="update-file-group" className="m-0">
-          <Row className="align-items-center mx-0 my-4">
-            <Col xs={2} className="text-right">
-              <Form.Label>New version:</Form.Label>
-            </Col>
-            <Col xs={6} className="mr-auto">
-              <Form.File
-                name="file"
-                id="update-file"
-                label={formValues.file ? formValues.file.name: "Version is not yet changed"}
-                custom
-                onChange={handleChange}
-                isInvalid={!!formErrors.file}
-                feedback={formErrors.file}
-                feedbackTooltip
-              />
-            </Col>
-          </Row>
-        </Form.Group>
-        <Row className="mx-0 my-4">
-          <Col xs={8} className="text-right">
-            <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add Updates First' : (loading ? < Loader color="light" size="sm" type="border" /> : 'Submit Changes')}
-            </Button>
+    <div className="updateModal">
+      <div className="updateModal-content rounded p-3">
+        <Row className="mx-0 mt-5 justify-content-center">
+        <Col xs={"auto"}>
+          <h3 className="display-4 text-dark" id="updateLogo">
+            Update File</h3>
           </Col>
         </Row>
-      </Form>
-    </Container>
+        <Form onSubmit={handleSubmit} noValidate>
+          <Form.Group controlId="update-name" className="m-0">
+            <Row className="align-items-center mx-0 my-4">
+              <Col xs={4} className="text-right">
+                <Form.Label>Rename:</Form.Label>
+              </Col>
+              <Col className="mr-auto">
+                  {currentItem ? customizedNameInput : defaultNameInput}
+                  <Form.Text className="text-muted">
+                   Use Alphanumeric characters and '/!-_.*()
+                  </Form.Text>
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    Please provide valid name
+                  </Form.Control.Feedback>
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group controlId="update-description" className="m-0">
+            <Row className="align-items-center mx-0 my-4">
+              <Col xs={4} className="text-right">
+                <Form.Label>Update description:</Form.Label>
+              </Col>
+              <Col className="mr-auto">
+                  <Form.Control as="textarea"
+                    name="description"
+                    rows={1}
+                    placeholder={currentItem ? currentItem.description : "Loading data..."}
+                    onChange={handleChange}
+                  />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group controlId="update-file-group" className="m-0">
+            <Row className="align-items-center mx-0 my-4">
+              <Col xs={4} className="text-right">
+                <Form.Label>New version:</Form.Label>
+              </Col>
+              <Col className="mr-auto">
+                <Form.File
+                  name="file"
+                  id="update-file"
+                  label={formValues.file ? formValues.file.name: "Version is not yet changed"}
+                  custom
+                  onChange={handleChange}
+                  isInvalid={!!formErrors.file}
+                  feedback={formErrors.file}
+                  feedbackTooltip
+                />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Row className="mx-0 my-4 justify-content-center">
+              <Button variant="secondary" type="submit" disabled={disabled}>
+                {disabled ? 'Add Updates First' : (loading ? < Loader color="light" size="sm" type="border" /> : 'Submit Changes')}
+              </Button>
+              <Button variant="warning" onClick={props.close} className="ml-4">Cancel</Button>
+          </Row>
+        </Form>
+      </div>
+    </div>
     </>
   )
+
+  return (props.show ? updateModal : null)
 }

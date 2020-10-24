@@ -9,17 +9,22 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useHistory } from "react-router-dom";
 import { DeleteModal } from './modals';
+import UpdateModal from './update'
 
 
 export default function SingleItem(props) {
   const [show, setShow] = useState(false);
+  const [updateShow, setUpdateShow] = useState(false);
 
-  let history = useHistory();
 
   function editFile() {
-    history.push('update/' + props.item.id)
+    setUpdateShow(true)
+  }
+
+  function processUpdate() {
+    props.fetchItems(true);
+    setUpdateShow(false)
   }
 
   async function downloadFile() {
@@ -29,6 +34,10 @@ export default function SingleItem(props) {
 
   function closeModal() {
     setShow(false);
+  }
+
+  function closeUpdate() {
+    setUpdateShow(false)
   }
 
   function deleteFile() {
@@ -50,6 +59,7 @@ export default function SingleItem(props) {
   return (
     <>
     <DeleteModal show={show} deleteFile={deleteFile} close={closeModal}/>
+    <UpdateModal show={updateShow} update={processUpdate} close={closeUpdate} item={props.item}  />
     <Row className="item text-muted border-bottom align-items-center text-break mx-0">
       <Col sm={2}>{props.item.filename}</Col>
       <Col sm={2}><small>{props.item.username} {props.item.lastname}</small></Col>
