@@ -23,7 +23,7 @@ export default function SingleItem(props) {
   }
 
   function processUpdate() {
-    props.fetchItems(true);
+    props.fetchItems({attributes: true});
     setUpdateShow(false)
   }
 

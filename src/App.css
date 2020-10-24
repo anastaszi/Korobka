@@ -100,4 +100,7 @@
   --amplify-primary-tint: #ff7359;
 }
 
+amplify-authenticator {
+}
+
 a:link, a:hover, a:active, a {text-decoration:none; color: inherit;}

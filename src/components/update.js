@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { API, Storage, graphqlOperation } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import bsCustomFileInput from 'bs-custom-file-input';
 
 import Row from 'react-bootstrap/Row';
@@ -16,7 +16,6 @@ export default function Update(props) {
   const initialState = {filename: '', description: '', file: null}
 
   const [currentItem, setCurrentItem] = useState();
-  const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [formValues, setFormValues] = useState(initialState);
   const [formErrors, setFormErrors] = useState({});
@@ -168,7 +167,7 @@ export default function Update(props) {
           </Form.Group>
           <Row className="mx-0 my-4 justify-content-center">
               <Button variant="secondary" type="submit" disabled={disabled}>
-                {disabled ? 'Add Updates First' : (loading ? < Loader color="light" size="sm" type="border" /> : 'Submit Changes')}
+                {disabled ? 'Add Updates First' : 'Submit Changes'}
               </Button>
               <Button variant="warning" onClick={props.close} className="ml-4">Cancel</Button>
           </Row>

@@ -1,5 +1,4 @@
 import React, {  useRef, useState, useEffect } from 'react';
-import { Auth } from 'aws-amplify';
 import bsCustomFileInput from 'bs-custom-file-input';
 
 import Row from 'react-bootstrap/Row';
@@ -12,8 +11,6 @@ import Loader from './loader';
 const initialFile = {
   filename: '',
   description: '',
-  username: '',
-  lastname: '',
   bucket: process.env.REACT_APP_S3,
   region:  process.env.REACT_APP_S3_REGION,
 };
@@ -32,14 +29,7 @@ export default function AddItem(props) {
   const {createItem, items, dublicateItem} = props
 
   useEffect(() => {
-    console.log(props)
     bsCustomFileInput.init();
-    let mounted = true;
-    if (initialFile.username === '')
-      loadUserInfo(mounted);;
-    return function cleanup() {
-            mounted = false;
-        }
   }, []);
 
   useEffect(() => {
@@ -47,17 +37,6 @@ export default function AddItem(props) {
       submitFile();
     }
   }, [formErrors]);
-
-  function loadUserInfo(mounted) {
-    Auth.currentUserInfo()
-      .then((user) => {
-        initialFile.username = user.attributes.email;
-        initialFile.lastname = user.attributes.email;
-        initialFile.key = `private/${user.id}`;
-        if (mounted)
-          setFileData(initialFile);
-      }).catch((e) => console.log(e))
-  }
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -118,6 +97,12 @@ export default function AddItem(props) {
     resetData();
   }
 
+  var button = (
+    <Button variant="secondary" type="submit" disabled={disabled}>
+      {disabled ? 'Add file first' : (loading ? < Loader color="light" size="sm" type="border"/> : 'Submit')}
+    </Button>
+  )
+
   return (
     <>
     <Modal show={show} handleClose={handleClose}>
@@ -145,9 +130,7 @@ export default function AddItem(props) {
             </Form.Group>
         </Col>
         <Col sm="auto">
-            <Button variant="secondary" type="submit" disabled={disabled}>
-              {disabled ? 'Add file first' : (loading ? < Loader color="light" size="sm" type="border"/> : 'Submit')}
-            </Button>
+            {props.allowAdd ? button : ''}
             </Col>
           </Row>
     </Form>

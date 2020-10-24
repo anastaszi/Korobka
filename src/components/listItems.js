@@ -6,7 +6,6 @@ import SingleItem from './singleItem';
 import Loader from './loader';
 
 export default function ListItems(props) {
-  console.log(props)
   let items = props.items.map((item,index) => <SingleItem key={index} item={item} currentUser={props.user} fetchItems={(e) => props.fetchItems(e)} deleteItem={(e) => props.deleteItem(e)}/>)
   let loader =
       <Row className="justify-content-center">
