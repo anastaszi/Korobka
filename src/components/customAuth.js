@@ -7,7 +7,7 @@ import { ReactComponent as Logo} from './svg/logo.svg';
 export default function CustomAuth () {
   return (
     <Row className="mx-0 mt-5">
-      <Col sm={12} className="mb-3"><h1 className="display-3 text-dark" id="updateLogo"><Logo className="mr-3" id="logo-back"/>Korzina Storage</h1></Col>
+      <Col sm={12} className="mb-3"><h1 className="display-3 text-dark" id="updateLogo"><Logo className="mr-3" id="logo-back"/>Korobka Storage</h1></Col>
       <Col><AmplifyAuthenticator>
         <AmplifySignUp
           usernameAlias="email"
