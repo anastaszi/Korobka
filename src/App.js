@@ -86,7 +86,7 @@ async function getUserInfo(authData) {
   const adminMark = <div className="admin-logo"><AdminLogo /></div>
 
 
-  return authState === AuthState.SignedIn && user && user.attributes.email_verified ? (
+  return authState === AuthState.SignedIn && user ? (
   <>
       {(cognitoUser.group && (cognitoUser.group[0] === 'Admins')) ? adminMark : ''}
       < Header />
