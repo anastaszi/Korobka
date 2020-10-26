@@ -20,7 +20,6 @@ export default function CustomAuth () {
           ]}
         />
         <AmplifySignIn slot="sign-in" headerText="Sign In" usernameAlias="email"  />
-        <AmplifyConfirmSignIn headerText="My Custom Confirm Sign In Text" slot="confirm-sign-in"></AmplifyConfirmSignIn>
       </AmplifyAuthenticator>
       </Col>
     </Row>
