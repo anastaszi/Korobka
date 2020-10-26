@@ -31,7 +31,7 @@ function App(props) {
            getUserInfo(authData);
            fetchItems(authData);
        });
-   }, []);
+   }, [props]);
 
   async function fetchItems(authData) {
     if(authData && authData.attributes) {
